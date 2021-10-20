@@ -1,6 +1,7 @@
 /* eslint-disable */
 const { initializeApp } = require("firebase/app");
 const {
+  doc,
   getFirestore,
   collection,
   addDoc: addDocFb,
@@ -28,7 +29,7 @@ const addDoc = async (collectionName, data) => {
 const getDoc = async (collectionName, id) => {
   const db = getFirestore();
 
-  const docRef = doc(db, collection, id);
+  const docRef = doc(db, collectionName, id);
   const docSnap = await getDocFb(docRef);
 
   if (docSnap.exists()) {
