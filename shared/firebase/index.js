@@ -4,6 +4,7 @@ const {
   doc,
   getFirestore,
   collection,
+  setDoc: setDocFb,
   addDoc: addDocFb,
   getDoc: getDocFb,
 } = require("firebase/firestore");
@@ -40,4 +41,10 @@ const getDoc = async (collectionName, id) => {
   }
 };
 
-module.exports = { getDoc, addDoc, initFirebase };
+const setDoc = async (collectionName, id, data) => {
+  const db = getFirestore();
+
+  await setDocFb(doc(db, collectionName, id), data);
+};
+
+module.exports = { getDoc, addDoc, setDoc, initFirebase };

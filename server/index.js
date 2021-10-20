@@ -7,7 +7,7 @@ const server = http.Server(app).listen(8080);
 const { startLobbies } = require("./handlers/lobby");
 const { initFirebase } = require("../shared/firebase");
 
-const { createLobby } = require("./routes");
+const { createLobby, joinLobby, leaveLobby } = require("./routes");
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use(express.static(__dirname + "/../node_modules/"));
@@ -22,3 +22,5 @@ app.get("/", (req, res) => {
 });
 
 app.get("/create-lobby", createLobby);
+app.get("/join-lobby", joinLobby);
+app.get("/leave-lobby", leaveLobby);

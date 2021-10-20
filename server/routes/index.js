@@ -1,4 +1,4 @@
-const { addDoc } = require("../../shared/firebase");
+const { addDoc, setDoc, getDoc } = require("../../shared/firebase");
 const { defaultGameOptions } = require("../../shared/config");
 
 module.exports = {
@@ -25,6 +25,53 @@ module.exports = {
       res.json(newLobby);
     } catch (error) {
       console.log("createLobby error", req, error);
+    }
+  },
+  joinLobby: async function (req, res) {
+    try {
+      const userId = req.query.userId;
+      const lobbyId = req.query.lobbyId;
+
+      if (!userId) {
+        res.send("error");
+        return;
+      }
+
+      if (!lobbyId) {
+        res.send("error");
+        return;
+      }
+      const lobby = await getDoc("lobbies", lobbyId);
+      lobby.playerList.push(userId);
+
+      const newLobby = await setDoc("lobbies", lobbyId, lobby);
+      res.json(newLobby);
+    } catch (error) {
+      console.log("joinLobby error", req, error);
+    }
+  },
+  leaveLobby: async function (req, res) {
+    try {
+      const userId = req.query.userId;
+      const lobbyId = req.query.lobbyId;
+
+      if (!userId) {
+        res.send("error");
+        return;
+      }
+
+      if (!lobbyId) {
+        res.send("error");
+        return;
+      }
+      const lobby = await getDoc("lobbies", lobbyId);
+      const playerList = lobby.playerList.filter((p) => p !== userId);
+      lobby.playerList = playerList;
+      console.log(playerList);
+
+      const newLobby = await setDoc("lobbies", lobbyId, lobby);
+    } catch (error) {
+      console.log("leaveLobby error", req, error);
     }
   },
 };
