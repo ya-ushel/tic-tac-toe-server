@@ -13,8 +13,7 @@ export default {
     ...mapGetters(["getUser"]),
   },
   mounted() {
-    // !this.getUser ? this.$router.push("/") : this.$route.push("/auth");
-    console.log(this.$router, "getUser");
+    // !this.getUser ? this.$router.push("/lobby") : this.$router.push("/");
   },
 };
 </script>
