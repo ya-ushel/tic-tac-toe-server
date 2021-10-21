@@ -1,6 +1,13 @@
-const { collection, query, where } = require("firebase/firestore");
+const {
+  getFirestore,
+  collection,
+  query,
+  where,
+} = require("firebase/firestore");
 
 const getAllRooms = async () => {
+  const db = getFirestore();
+
   const q = query(collection(db, "rooms"));
 
   const querySnapshot = await getDocs(q);
