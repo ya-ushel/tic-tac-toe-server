@@ -4,6 +4,7 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
+    "build-client": "cd ./client && npm run build",
     "start": "cd ./client && npm install && npm run build && cd ../ && nodemon server/index.js localhost 8080",
     "heroku": "git push heroku HEAD:master"
   },
