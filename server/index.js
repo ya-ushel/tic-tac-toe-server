@@ -3,7 +3,8 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
-const server = http.Server(app).listen(8080);
+const port = process.env.PORT || 8080;
+const server = http.Server(app).listen(port);
 const { startLobbies } = require("./handlers/lobby");
 const { initFirebase } = require("../shared/firebase");
 
