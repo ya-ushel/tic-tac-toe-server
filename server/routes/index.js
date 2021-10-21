@@ -79,7 +79,7 @@ module.exports = {
     try {
       const rooms = await getAllRooms();
 
-      req.json(rooms);
+      res.json(rooms);
     } catch (err) {
       console.log(err);
     }
