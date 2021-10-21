@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <h1>getUser</h1>
+    <h1>{{ getUser.login }}</h1>
   </div>
 </template>
 
@@ -26,5 +26,9 @@ export default {
   width: 100%;
   height: 100px;
   background: rebeccapurple;
+}
+h1 {
+  padding: 0;
+  margin: 0;
 }
 </style>

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
+import axios from "../axios";
 
 Vue.use(Vuex);
 
@@ -10,7 +10,8 @@ export const store = new Vuex.Store({
       name: "",
       id: "",
     },
-    rooms: {},
+    rooms: [],
+    userRoom: {},
   },
   getters: {
     getUser(state) {
@@ -25,15 +26,30 @@ export const store = new Vuex.Store({
       state.user = payload;
     },
     setRooms(state, payload) {
-      state.user = payload;
-      console.log(state.user, "state.user");
+      state.rooms = payload;
+    },
+    setUserRoom(state, payload) {
+      state.userRoom = payload;
     },
   },
   actions: {
-    // getRooms({ commit }) {
-    //   axios.get("https://restcountries.com/v3.1/all").then((response) => {
-    //     commit("setRooms", response.data);
-    //   });
-    // },
+    getAllRooms({ commit }) {
+      axios
+        .get("https://tic-tac-toe-1337.herokuapp.com/rooms/list")
+        .then((response) => {
+          commit("setRooms", response.data);
+        });
+    },
+    createUserRooms({ commit }) {
+      console.log(this.state.user.id, "axios id");
+      axios
+        .get("https://tic-tac-toe-1337.herokuapp.com/rooms/create", {
+          id: this.state.user.id,
+        })
+        .then((response) => {
+          console.log(response, "response");
+          commit("setUserRoom", response.data);
+        });
+    },
   },
 });
