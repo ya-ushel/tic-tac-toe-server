@@ -1,30 +1,50 @@
 <template>
-  <div id="app"></div>
+  <div id="app">
+    <Lobby />
+    <!-- <router-view /> -->
+  </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import Lobby from "./pages/Lobby.vue";
+import { checkAuthState, createUser } from "./firebase";
 
 export default {
   name: "App",
 
-  components: {},
+  components: { Lobby },
   computed: {
     ...mapGetters(["getUser"]),
   },
-  mounted() {
-    // !this.getUser ? this.$router.push("/lobby") : this.$router.push("/");
+  methods: {
+    getterUser() {
+      let login = localStorage.getItem("login");
+
+      if (login === null) {
+        createUser();
+        checkAuthState("qwe");
+      }
+
+      let user = {
+        login: localStorage.getItem("login"),
+        id: localStorage.getItem("id"),
+      };
+
+      this.$store.commit("setUser", user);
+    },
   },
+  beforeMount() {
+    this.getterUser();
+  },
+  mounted() {},
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+#app,
+body {
+  margin: 0;
+  padding: 0;
 }
 </style>

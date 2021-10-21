@@ -6,9 +6,6 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-  },
-  {
     path: "/lobby",
     name: "Lobby",
     component: Lobby,

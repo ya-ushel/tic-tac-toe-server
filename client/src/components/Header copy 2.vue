@@ -1,10 +1,14 @@
 <template>
-  <div></div>
+  <div>
+    <label for="login"></label>
+    <input type="text" name="login" />
+    <button>log in</button>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "Fields",
+  name: "Header",
   props: {},
   data() {
     return {};
