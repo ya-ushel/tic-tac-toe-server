@@ -7,7 +7,7 @@ const server = http.Server(app).listen(8080);
 const { startLobbies } = require("./handlers/lobby");
 const { initFirebase } = require("../shared/firebase");
 
-const { createLobby, joinLobby, leaveLobby } = require("./routes");
+const { createLobby, joinLobby, leaveLobby, getRooms } = require("./routes");
 
 app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use(express.static(__dirname + "/../node_modules/"));
@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
   // res.sendFile("/client/dist/index.html", { root: parentDirname });
 });
 
-app.get("/create-lobby", createLobby);
-app.get("/join-lobby", joinLobby);
-app.get("/leave-lobby", leaveLobby);
+app.get("/rooms/create", createLobby);
+app.get("/rooms/join", joinLobby);
+app.get("/rooms/leave", leaveLobby);
+app.get("/rooms/list", getRooms);

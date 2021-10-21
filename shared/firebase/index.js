@@ -7,6 +7,8 @@ const {
   setDoc: setDocFb,
   addDoc: addDocFb,
   getDoc: getDocFb,
+  query,
+  where,
 } = require("firebase/firestore");
 
 const { firebaseConfig } = require("../config");
