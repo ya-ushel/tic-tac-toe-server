@@ -71,6 +71,7 @@ module.exports = {
       console.log(playerList);
 
       const newLobby = await setDoc("rooms", lobbyId, lobby);
+      res.json(newLobby);
     } catch (error) {
       console.log("leaveLobby error", req, error);
     }
