@@ -8,7 +8,7 @@ module.exports = {
     try {
       const options = req.query.options || defaultGameOptions;
       const name = req.query.name || "Default room name";
-      const hostId = req.get("userId");
+      const hostId = req.get("userId") || 1;
       const playerList = [hostId];
       console.log("hostId", hostId);
       if (!hostId) {
@@ -24,7 +24,11 @@ module.exports = {
         options,
       };
 
-      await addDoc("rooms", newLobby);
+      const id = await addDoc("rooms", newLobby);
+
+      newLobby.id = id;
+
+      await setDoc("rooms", id, newLobby);
       res.json(newLobby);
     } catch (error) {
       console.log("createLobby error", req, error);
