@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "../axios";
+import user from "./user";
 
 Vue.use(Vuex);
 
@@ -51,5 +52,8 @@ export const store = new Vuex.Store({
           commit("setUserRoom", response.data);
         });
     },
+  },
+  modules: {
+    user,
   },
 });

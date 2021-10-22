@@ -37,7 +37,9 @@ export default {
   beforeMount() {
     this.getterUser();
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$store);
+  },
 };
 </script>
 
