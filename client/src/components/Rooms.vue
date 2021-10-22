@@ -37,6 +37,7 @@ export default {
     async createRoom() {
       console.log("join");
       await this.$store.dispatch("createUserRooms");
+      await this.$store.dispatch("getAllRooms");
     },
   },
 };
