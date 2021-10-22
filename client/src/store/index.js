@@ -43,7 +43,7 @@ export const store = new Vuex.Store({
     createUserRooms({ commit }) {
       console.log(this.state.user.id, "axios id");
       axios
-        .post("https://tic-tac-toe-1337.herokuapp.com/rooms/create", {
+        .post("https://tic-tac-toe-1337.herokuapp.com/rooms/create", null, {
           headers: { userId: this.state.user.id || 1 },
         })
         .then((response) => {
