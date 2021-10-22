@@ -1,6 +1,7 @@
 const { addDoc, setDoc, getDoc } = require("../../shared/firebase");
 const { getAllRooms } = require("../../shared/firebase/rooms");
 const { defaultGameOptions } = require("../../shared/config");
+const { GameModel } = require("../models");
 
 module.exports = {
   createLobby: async function (req, res) {
@@ -16,6 +17,7 @@ module.exports = {
       }
 
       const newLobby = {
+        status: "created",
         name,
         hostId,
         playerList,
@@ -31,21 +33,21 @@ module.exports = {
   joinLobby: async function (req, res) {
     try {
       const userId = req.get("userId");
-      const lobbyId = req.query.lobbyId;
+      const roomId = req.query.roomId;
 
       if (!userId) {
         res.send("error");
         return;
       }
 
-      if (!lobbyId) {
+      if (!roomId) {
         res.send("error");
         return;
       }
-      const lobby = await getDoc("rooms", lobbyId);
-      lobby.playerList.push(userId);
+      const room = await getDoc("rooms", roomId);
+      room.playerList.push(userId);
 
-      const newLobby = await setDoc("rooms", lobbyId, lobby);
+      const newLobby = await setDoc("rooms", roomId, room);
       res.json(newLobby);
     } catch (error) {
       console.log("joinLobby error", req, error);
@@ -54,23 +56,23 @@ module.exports = {
   leaveLobby: async function (req, res) {
     try {
       const userId = req.get("userId");
-      const lobbyId = req.query.lobbyId;
+      const roomId = req.query.roomId;
 
       if (!userId) {
         res.send("error");
         return;
       }
 
-      if (!lobbyId) {
+      if (!roomId) {
         res.send("error");
         return;
       }
-      const lobby = await getDoc("rooms", lobbyId);
-      const playerList = lobby.playerList.filter((p) => p !== userId);
-      lobby.playerList = playerList;
+      const room = await getDoc("rooms", roomId);
+      const playerList = room.playerList.filter((p) => p !== userId);
+      room.playerList = playerList;
       console.log(playerList);
 
-      const newLobby = await setDoc("rooms", lobbyId, lobby);
+      const newLobby = await setDoc("rooms", roomId, room);
       res.json(newLobby);
     } catch (error) {
       console.log("leaveLobby error", req, error);
@@ -84,5 +86,41 @@ module.exports = {
     } catch (err) {
       console.log(err);
     }
+  },
+  startGame: async function (req, res) {
+    const userId = req.get("userId");
+    const roomId = req.query.roomId;
+    console.log(roomId);
+
+    if (!roomId) {
+      res.send("error");
+      return;
+    }
+
+    const room = await getDoc("rooms", roomId);
+
+    if (room.options.players > room.playerList.length) {
+      res.send("error");
+      return;
+    }
+
+    // if (room.hostId !== userId) {
+    //   res.send("error");
+    //   return;
+    // }
+
+    room.status = "started";
+    console.log(room);
+    await setDoc("rooms", roomId, room);
+
+    const gameProps = {
+      settings: room.options,
+      players: room.playerList,
+      hostId: room.hostId,
+    };
+    const game = new GameModel(gameProps).get();
+    await addDoc("games", game);
+    console.log(game);
+    res.send(game);
   },
 };

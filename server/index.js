@@ -8,7 +8,13 @@ const port = process.env.PORT || 8080;
 const server = http.Server(app).listen(port);
 const { startLobbies } = require("./handlers/lobby");
 const { initFirebase } = require("../shared/firebase");
-const { createLobby, joinLobby, leaveLobby, getRooms } = require("./routes");
+const {
+  createLobby,
+  joinLobby,
+  leaveLobby,
+  getRooms,
+  startGame,
+} = require("./routes");
 
 const corsOptions = {
   origin: "*",
@@ -34,3 +40,4 @@ app.post("/rooms/create", createLobby);
 app.post("/rooms/join", joinLobby);
 app.post("/rooms/leave", leaveLobby);
 app.get("/rooms/list", getRooms);
+app.get("/rooms/start", startGame);
