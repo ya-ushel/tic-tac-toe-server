@@ -36,8 +36,7 @@ export default {
 
 <style>
 .content {
-  height: 300px;
-  min-height: 600px;
+  height: 100vh;
   width: 100%;
   display: flex;
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="header">
-    <h1>{{ getUser.login }}</h1>
+    <h1>{{ getUser.user.login }}</h1>
+    <h1>{{ getUser.user.id }}</h1>
   </div>
 </template>
 
@@ -16,7 +17,9 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  mounted() {
+    console.log(this.getUser, "getUser");
+  },
   methods: {},
 };
 </script>
@@ -25,7 +28,7 @@ export default {
 .header {
   width: 100%;
   height: 100px;
-  background: rebeccapurple;
+  background: #242424;
 }
 h1 {
   padding: 0;

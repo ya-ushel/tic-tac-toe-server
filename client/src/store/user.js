@@ -5,13 +5,21 @@ Vue.use(Vuex);
 
 export default {
   state: {
-    qwe: "kjnj",
-  },
-  getters: {
-    getQwe(state) {
-      return state.qwe;
+    user: {
+      name: "",
+      id: "",
     },
   },
-  mutations: {},
+
+  getters: {
+    getUser(state) {
+      return state;
+    },
+  },
+  mutations: {
+    setUser(state, payload) {
+      state.user = payload;
+    },
+  },
   actions: {},
 };

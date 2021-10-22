@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
   // res.sendFile("/client/dist/index.html", { root: parentDirname });
 });
 
-app.get("/rooms/create", createLobby);
-app.get("/rooms/join", joinLobby);
-app.get("/rooms/leave", leaveLobby);
+app.post("/rooms/create", createLobby);
+app.post("/rooms/join", joinLobby);
+app.post("/rooms/leave", leaveLobby);
 app.get("/rooms/list", getRooms);
