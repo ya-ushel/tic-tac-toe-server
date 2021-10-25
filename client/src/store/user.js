@@ -31,12 +31,6 @@ export default {
     },
   },
   actions: {
-    getAllUsers({ commit }) {
-      axios
-        .get("https://tic-tac-toe-1337.herokuapp.com/users/list")
-        .then((response) => {
-          commit("setUsers", response.data);
-        });
-    },
+    getAllUsers({ commit }) {},
   },
 };
