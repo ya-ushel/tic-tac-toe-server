@@ -18,7 +18,11 @@
     "socket.io": "^2.4.1"
   },
   "devDependencies": {
-    "nodemon": "1.18.4"
+    "node-sass": "^6.0.1",
+    "nodemon": "1.18.4",
+    "sass": "^1.43.3",
+    "sass-loader": "^10.2.0",
+    "style-loader": "^3.3.1"
   },
   "keywords": []
 }

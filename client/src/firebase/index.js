@@ -1,14 +1,9 @@
 import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { addDoc, initFirebase } from "../../../shared/firebase";
-
-initFirebase();
-
-console.log("l kjln");
+import { addDoc, initFirebase, app } from "../../../shared/firebase";
 
 export const createUser = () => {
-  const auth = getAuth();
+  const auth = getAuth(app);
 
-  console.log("createUser");
   signInAnonymously(auth)
     .then(() => {})
     .catch((error) => {
@@ -20,7 +15,7 @@ export const createUser = () => {
 
 export const checkAuthState = (login) => {
   console.log("checkAuthState");
-  const auth = getAuth();
+  const auth = getAuth(app);
 
   onAuthStateChanged(auth, (user) => {
     console.log("onAuthStateChanged");

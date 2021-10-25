@@ -41,3 +41,4 @@ app.post("/rooms/join", joinLobby);
 app.post("/rooms/leave", leaveLobby);
 app.get("/rooms/list", getRooms);
 app.get("/rooms/start", startGame);
+app.get("/users/list", getUsers);

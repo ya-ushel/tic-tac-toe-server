@@ -1,5 +1,6 @@
 const { addDoc, setDoc, getDoc } = require("../../shared/firebase");
 const { getAllRooms } = require("../../shared/firebase/rooms");
+const { getAllUsers } = require("../../shared/firebase/users");
 const { defaultGameOptions } = require("../../shared/config");
 const { GameModel } = require("../models");
 
@@ -87,6 +88,15 @@ module.exports = {
       const rooms = await getAllRooms();
 
       res.json(rooms);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  getUsers: async function (req, res) {
+    try {
+      const users = await getAllUsers();
+
+      res.json(users);
     } catch (err) {
       console.log(err);
     }

@@ -34,10 +34,8 @@ export default {
       this.$store.commit("setUser", user);
     },
   },
-  beforeMount() {
-    this.getterUser();
-  },
   mounted() {
+    this.getterUser();
     console.log(this.$store);
   },
 };
@@ -51,8 +49,15 @@ body {
   font-family: "Roboto Slab", serif;
   margin: 0;
   padding: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   overflow: hidden;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: calc(100vw - 20px);
 }
 </style>

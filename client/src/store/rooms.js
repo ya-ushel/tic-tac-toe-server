@@ -34,7 +34,6 @@ export default {
           response.data.forEach((room) => {
             room.playerList.forEach((player) => {
               if (player === this.state.user.user.id) {
-                console.log(room, "player");
                 commit("setUserRoom", room);
               }
             });
@@ -52,12 +51,14 @@ export default {
         });
     },
     leaveUserRooms({ commit }) {
-      console.log(this.state, "axios id");
       axios
         .post(
           "https://tic-tac-toe-1337.herokuapp.com/rooms/leave",
-          { lobbyId: this.state.user.user.id },
+          {},
           {
+            params: {
+              roomId: this.state.rooms.userRoom.id,
+            },
             headers: { userId: this.state.user.user.id },
           }
         )

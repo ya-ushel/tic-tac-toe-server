@@ -9,12 +9,14 @@ const {
   where,
   doc,
 } = require("firebase/firestore");
+import "firebase/auth";
+import "firebase/firestore";
 
 const { firebaseConfig } = require("../config");
-
+let app = null;
 const initFirebase = () => {
   console.log("initFirebase");
-  const app = initializeApp(firebaseConfig);
+  app = initializeApp(firebaseConfig);
 };
 
 const addDoc = async (collectionName, data) => {
@@ -49,4 +51,5 @@ const setDoc = async (collectionName, id, data) => {
   await setDocFb(doc(db, collectionName, id), data);
 };
 
-module.exports = { getDoc, addDoc, setDoc, initFirebase };
+export { getDoc, addDoc, setDoc, initFirebase, app };
+// module.exports = { getDoc, addDoc, setDoc, initFirebase };

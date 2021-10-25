@@ -2,6 +2,7 @@
   <div>
     <Header />
     <div class="content">
+      <UserList />
       <Rooms />
       <RoomInfo />
     </div>
@@ -12,6 +13,7 @@
 import Header from "../components/Header.vue";
 import RoomInfo from "../components/RoomInfo.vue";
 import Rooms from "../components/Rooms.vue";
+import UserList from "../components/UserList.vue";
 
 export default {
   name: "Lobby",
@@ -19,6 +21,7 @@ export default {
     Header,
     RoomInfo,
     Rooms,
+    UserList,
   },
   props: {
     count: Number,

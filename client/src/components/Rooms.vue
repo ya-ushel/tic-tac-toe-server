@@ -1,30 +1,34 @@
 <template>
   <div class="rooms">
-    <div class="rooms-header">
-      <div class="rooms-header-title">
-        <p>List rooms</p>
-      </div>
-      <button class="create-btn" @click="createRoom">
+    <!-- <button class="create-btn" @click="createRoom">
         <p>new room</p>
         <b>+</b>
-      </button>
+      </button> -->
+    <h3>Rooms list</h3>
+    <div class="header-string">
+      <div class="header-string-number"></div>
+      <div class="header-string-name">Name</div>
+      <div class="header-string-players">Count players</div>
+      <div class="header-string-size">Size field</div>
+      <div class="header-string-lock"></div>
     </div>
-
     <div class="rooms-container">
       <div class="scroll">
-        <Room v-for="(item, i) in getRooms" :key="i" :data="item" />
+        <Room v-for="(item, i) in getRooms" :key="i" :index="i" :data="item" />
       </div>
     </div>
+    <CreateRoom />
   </div>
 </template>
 
 <script>
 import Room from "../components/Room.vue";
+import CreateRoom from "../components/CreateRoom.vue";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "Header",
-  components: { Room },
+  name: "Rooms",
+  components: { Room, CreateRoom },
   computed: {
     ...mapGetters(["getRooms"]),
   },
@@ -46,57 +50,90 @@ export default {
 
 <style>
 .rooms {
-  width: calc(100% - 340px);
+  width: 50vw;
   height: calc(100vh - 100px);
-  padding: 20px;
-  background: #c9c9c9;
+  padding: 0 20px;
+  margin: 0 auto;
 }
 
-.rooms-header {
+h3 {
+  margin: 0px auto 10px auto;
+  text-align: center;
+}
+
+.header-string {
   display: flex;
-  justify-content: space-between;
-}
-
-.rooms-header-title {
   height: 40px;
-  width: 200px;
-  background: rgb(0, 22, 31);
-  position: relative;
-  border-radius: 3px 0 0;
+  padding: 0 30px;
+  margin: 0;
+  background: #d5da35;
+  box-shadow: 0px 15px 8px -13px #b2b718;
+  border-radius: 10px;
 }
 
-.rooms-header-title:after {
-  content: "";
-  position: absolute;
-  right: -20px;
-  top: 0;
-  width: 0;
-  height: 0;
-  border-left: 7px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 40px solid rgb(0, 22, 31);
-  clear: both;
+.header-string div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 12px;
+  text-align: center;
 }
 
-.rooms-header p {
-  margin-left: 10px;
-  line-height: 40px;
-  font-size: 25px;
-  color: white;
+.header-string-number {
+  width: 40px;
+}
+
+.header-string-name {
+  width: calc(50% - 40px);
+}
+
+.header-string-players {
+  width: calc(25% - 20px);
+}
+
+.header-string-size {
+  width: 25%;
+}
+
+.header-string-lock {
+  width: 20px;
 }
 
 .rooms-container {
-  padding: 5px;
-  border: 3px solid rgb(0, 22, 31);
   border-radius: 0 3px 3px 3px;
-  background: linear-gradient(to bottom, #555555 0%, #464646 100%);
-  box-shadow: 0px 0px 6px 2px #161616 inset;
-  height: calc(100vh - 186px);
-  overflow: scroll;
+  height: calc(100% - 260px);
+  overflow: -moz-scrollbars-vertical;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  direction: rtl;
 }
 
 .scroll {
   height: fit-content;
+  direction: ltr;
+  padding: 0 20px;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #d5da358c;
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #d5da358c;
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 .create-btn {
@@ -122,5 +159,6 @@ button {
   background: none;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: 700;
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
   <div class="header">
-    <h1>{{ getUser.user.login }}</h1>
-    <h1>{{ getUser.user.id }}</h1>
+    <!-- <h1>{{ getUser.user.login }}</h1>
+    <h1>{{ getUser.user.id }}</h1> -->
+    <div class="logo">
+      <img src="../assets/img/logo.jpg" alt="" />
+    </div>
   </div>
 </template>
 
@@ -28,10 +31,15 @@ export default {
 .header {
   width: 100%;
   height: 100px;
-  background: #242424;
 }
 h1 {
   padding: 0;
   margin: 0;
+}
+.logo {
+  height: 100px;
+  width: 100px;
+  display: flex;
+  margin: 0 auto;
 }
 </style>
