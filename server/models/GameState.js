@@ -1,19 +1,18 @@
-class GameStateModel {
+const { Model } = require("./Model");
+
+class GameStateModel extends Model {
   status = null;
   board = {};
   currentPlayerId = null;
 
   constructor(props) {
+    super(props);
+
     this.status = "created";
     this.currentPlayerId = props.hostId;
-  }
 
-  get() {
-    return {
-      status: this.status,
-      board: this.board,
-      currentPlayerId: this.currentPlayerId,
-    };
+    this.add("status", this.status);
+    this.add("currentPlayerId", this.currentPlayerId);
   }
 }
 

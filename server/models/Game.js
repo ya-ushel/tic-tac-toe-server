@@ -1,27 +1,21 @@
+const { uid } = require("uid");
+const { Model } = require("./Model");
 const { GameStateModel } = require("./GameState");
 
-class GameModel {
+class GameModel extends Model {
   settings = {};
   players = [];
   hostId = null;
   state = {};
 
   constructor(props) {
-    const { settings, players, hostId } = props;
+    super(props);
 
-    this.settings = settings;
-    this.hostId = hostId;
-    this.players = players;
-    this.state = new GameStateModel(props).get();
-  }
+    const id = uid();
+    const state = new GameStateModel(props).get();
 
-  get() {
-    return {
-      settings: this.settings,
-      players: this.players,
-      hostId: this.hostId,
-      state: this.state,
-    };
+    this.addField("id", id);
+    this.addField("state", state);
   }
 }
 

@@ -9,11 +9,11 @@ module.exports = {
     try {
       const options = req.query.options || defaultGameOptions;
       const name = req.query.name || "Default room name";
-      const hostId = req.get("userId") || 1;
+      const hostId = req.get("userId");
       const playerList = [hostId];
-      console.log("hostId", hostId);
+
       if (!hostId) {
-        res.send("error");
+        res.send("error: userId undefined");
         return;
       }
 
@@ -41,12 +41,12 @@ module.exports = {
       const roomId = req.query.roomId;
 
       if (!userId) {
-        res.send("error");
+        res.send("error: userId undefined");
         return;
       }
 
       if (!roomId) {
-        res.send("error");
+        res.send("error: roomId undefined");
         return;
       }
       const room = await getDoc("rooms", roomId);
@@ -64,12 +64,12 @@ module.exports = {
       const roomId = req.query.roomId;
 
       if (!userId) {
-        res.send("error");
+        res.send("error: userId undefined");
         return;
       }
 
       if (!roomId) {
-        res.send("error");
+        res.send("error: roomId undefined");
         return;
       }
       const room = await getDoc("rooms", roomId);
@@ -107,14 +107,19 @@ module.exports = {
     console.log(roomId);
 
     if (!roomId) {
-      res.send("error");
+      res.send("error: roomId undefined");
       return;
     }
 
     const room = await getDoc("rooms", roomId);
 
+    if (!room) {
+      res.send("error: room doesnt exist");
+      return;
+    }
+
     if (room.options.players > room.playerList.length) {
-      res.send("error");
+      res.send("error: not enough players");
       return;
     }
 
@@ -124,7 +129,7 @@ module.exports = {
     // }
 
     room.status = "started";
-    console.log(room);
+
     await setDoc("rooms", roomId, room);
 
     const gameProps = {
@@ -132,9 +137,11 @@ module.exports = {
       players: room.playerList,
       hostId: room.hostId,
     };
-    const game = new GameModel(gameProps).get();
-    await addDoc("games", game);
-    console.log(game);
-    res.send(game);
+    const game = new GameModel(gameProps);
+    const gameModel = game.get();
+
+    await setDoc("games", gameModel.id, gameModel);
+
+    res.send(gameModel);
   },
 };
