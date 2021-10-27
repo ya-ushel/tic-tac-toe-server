@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import Room from "../components/Room.vue";
-import CreateRoom from "../components/CreateRoom.vue";
+import Room from "./Room.vue";
+import CreateRoom from "./CreateRoom.vue";
 import { mapGetters } from "vuex";
 
 export default {

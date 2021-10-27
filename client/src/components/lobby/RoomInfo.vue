@@ -19,6 +19,7 @@
             Join
           </button>
           <button v-else class="leave-btn" @click="leaveRoom">Leave</button>
+          <button class="start-btn" @click="startGame">Start</button>
         </div>
       </div>
     </div>
@@ -28,7 +29,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import ActiveRoom from "../components/ActiveRoom.vue";
+import ActiveRoom from "./ActiveRoom.vue";
 
 export default {
   name: "RoomInfo",
@@ -59,6 +60,10 @@ export default {
   methods: {
     async joinRoom() {
       // await this.$store.dispatch("createUserRooms");
+    },
+    async startGame() {
+      await this.$store.commit("setGameState", true);
+      this.$router.push({ name: "Board" }).catch((err) => {});
     },
     async leaveRoom() {
       this.userInRoom = true;
@@ -104,6 +109,7 @@ export default {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 
 .room-info button {
@@ -117,6 +123,12 @@ export default {
 .room-info .join-btn {
   color: #274482;
   background: #d5da35;
+}
+
+.room-info .start-btn {
+  bottom: 50px;
+
+  background: lightblue;
 }
 
 .room-info .leave-btn {

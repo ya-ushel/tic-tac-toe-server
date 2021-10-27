@@ -5,13 +5,10 @@
 </template>
 
 <script>
-import Room from "./Room.vue";
-import CreateRoom from "./CreateRoom.vue";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "Rooms",
-  components: { Room, CreateRoom },
+  name: "Settings",
   computed: {
     ...mapGetters(["getRooms"]),
   },

@@ -52,10 +52,10 @@ export default {
   width: 100%;
 }
 
-.room:hover {
-  /* font-size: 18px; */
-  /* padding: 15px 10px; */
-}
+/* .room:hover {
+  font-size: 18px; 
+  padding: 15px 10px;
+} */
 
 .room div {
   display: flex;

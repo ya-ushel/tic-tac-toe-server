@@ -11,9 +11,9 @@
 
 <script>
 import Header from "../components/Header.vue";
-import RoomInfo from "../components/RoomInfo.vue";
-import Rooms from "../components/Rooms.vue";
-import UserList from "../components/UserList.vue";
+import RoomInfo from "../components/lobby/RoomInfo.vue";
+import Rooms from "../components/lobby/Rooms.vue";
+import UserList from "../components/lobby/UserList.vue";
 
 export default {
   name: "Lobby",

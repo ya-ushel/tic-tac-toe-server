@@ -12,7 +12,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Settings from "../components/Settings.vue";
+import Settings from "./Settings.vue";
 
 export default {
   name: "UserList",

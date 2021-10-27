@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <Lobby />
-    <!-- <router-view /> -->
+    <router-view />
   </div>
 </template>
 
@@ -15,7 +14,7 @@ export default {
 
   components: { Lobby },
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(["getUser", "getStateGame"]),
   },
   methods: {
     getterUser() {
@@ -32,11 +31,24 @@ export default {
       };
 
       this.$store.commit("setUser", user);
+      // this.$socket.emit("userJoined", user);
+    },
+  },
+  sockets: {
+    connect: function() {
+      console.log("socket connected");
+    },
+    customEmit: function(data) {
+      console.log(
+        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
+      );
     },
   },
   mounted() {
     this.getterUser();
-    console.log(this.$store);
+    this.getStateGame
+      ? this.$router.push({ name: "Board" }).catch((err) => {})
+      : this.$router.push({ name: "Lobby" }).catch((err) => {});
   },
 };
 </script>
