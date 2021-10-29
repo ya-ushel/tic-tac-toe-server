@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const port = process.env.PORT || 8080;
 const server = http.Server(app).listen(port);
-const { startLobbies } = require("./handlers/lobby");
+const { initSockets } = require("./handlers/sockets");
 const { initFirebase } = require("../shared/firebase");
 const {
   createLobby,
@@ -27,7 +27,7 @@ app.use(express.static(__dirname + "/../node_modules/"));
 
 app.use(cors(corsOptions)); // Use this after the variable declaration
 
-startLobbies(server);
+initSockets(server);
 initFirebase();
 
 app.get("/", (req, res) => {
