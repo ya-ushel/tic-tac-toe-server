@@ -1,30 +1,25 @@
 const socketIo = require("socket.io");
 
-const startLobbies = (server) => {
+const initSockets = (server) => {
   const io = socketIo(server);
-  const clients = {};
+  const players = {};
 
-  const addClient = (socket) => {
-    console.log("New client connected", socket.id);
-    clients[socket.id] = socket;
+  const addPlayer = (socket) => {
+    console.log("New Player connected", socket.id);
+    players[socket.id] = socket;
   };
-  const removeClient = (socket) => {
-    console.log("Client disconnected", socket.id);
-    delete clients[socket.id];
+  const removePlayer = (socket) => {
+    console.log("Player disconnected", socket.id);
+    delete players[socket.id];
   };
 
   io.sockets.on("connection", (socket) => {
     let id = socket.id;
 
-    addClient(socket);
-
-    socket.on("mousemove", (data) => {
-      data.id = id;
-      socket.broadcast.emit("moving", data);
-    });
+    addPlayer(socket);
 
     socket.on("disconnect", () => {
-      removeClient(socket);
+      removePlayer(socket);
       socket.broadcast.emit("clientdisconnect", id);
     });
   });
@@ -103,4 +98,4 @@ const startLobbies = (server) => {
   });
 };
 
-module.exports.startLobbies = startLobbies;
+module.exports.initSockets = initSockets;
