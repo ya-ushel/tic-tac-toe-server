@@ -24,8 +24,8 @@ const initSockets = (server) => {
     });
   });
 
-  var players = {},
-    unmatched;
+  // var players = {},
+    // unmatched;
 
   // function joinGame(socket) {
   //   // Add the player to our object of players
