@@ -10,6 +10,7 @@ module.exports = {
       const { options = defaultGameOptions, name = "Default room name" } =
         req.body;
 
+      console.log("options, name", options, name);
       const hostId = req.get("userId");
       const playerList = [hostId];
 
@@ -34,6 +35,7 @@ module.exports = {
       res.json(newLobby);
     } catch (error) {
       console.log("createLobby error", req, error);
+      res.json(error);
     }
   },
   joinLobby: async function (req, res) {
@@ -57,6 +59,7 @@ module.exports = {
       res.json(newLobby);
     } catch (error) {
       console.log("joinLobby error", req, error);
+      res.json(error);
     }
   },
   leaveLobby: async function (req, res) {
@@ -91,6 +94,7 @@ module.exports = {
       res.json(newLobby);
     } catch (error) {
       console.log("leaveLobby error", req, error);
+      res.json(error);
     }
   },
   getRooms: async function (req, res) {
@@ -100,6 +104,7 @@ module.exports = {
       res.json(rooms);
     } catch (err) {
       console.log(err);
+      res.json(error);
     }
   },
   getUsers: async function (req, res) {
@@ -109,6 +114,7 @@ module.exports = {
       res.json(users);
     } catch (err) {
       console.log(err);
+      res.json(error);
     }
   },
   startGame: async function (req, res) {
