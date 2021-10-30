@@ -81,6 +81,8 @@ module.exports = {
 
       if (room.playerList.length === 1) {
         await deleteDoc("rooms", roomId);
+        res.send("deleted");
+        return;
       }
 
       if (userId === room.hostId) {
