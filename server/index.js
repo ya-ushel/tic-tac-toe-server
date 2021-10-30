@@ -1,4 +1,6 @@
 const http = require("http");
+const bodyParser = require("body-parser");
+
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -26,6 +28,14 @@ app.use(express.static(path.join(__dirname, "../client/dist")));
 app.use(express.static(__dirname + "/../node_modules/"));
 
 app.use(cors(corsOptions)); // Use this after the variable declaration
+
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(
+  bodyParser.urlencoded({
+    // to support URL-encoded bodies
+    extended: true,
+  })
+);
 
 initSockets(server);
 initFirebase();
