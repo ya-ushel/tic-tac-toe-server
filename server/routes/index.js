@@ -7,6 +7,7 @@ const { GameModel } = require("../models");
 module.exports = {
   createLobby: async function (req, res) {
     try {
+      console.log("req body", req.body);
       const { options = defaultGameOptions, name = "Default room name" } =
         req.body;
 
