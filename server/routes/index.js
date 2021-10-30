@@ -1,4 +1,4 @@
-const { addDoc, setDoc, getDoc } = require("../../shared/firebase");
+const { addDoc, setDoc, getDoc, deleteDoc } = require("../../shared/firebase");
 const { getAllRooms } = require("../../shared/firebase/rooms");
 const { getAllUsers } = require("../../shared/firebase/users");
 const { defaultGameOptions } = require("../../shared/config");
@@ -73,6 +73,15 @@ module.exports = {
         return;
       }
       const room = await getDoc("rooms", roomId);
+
+      if (room.playerList.length === 1) {
+        await deleteDoc("rooms", roomId);
+      }
+
+      if (userId === room.hostId) {
+        room.hostId = room.playerList[0];
+      }
+
       const playerList = room.playerList.filter((p) => p !== userId);
       room.playerList = playerList;
       console.log(playerList);

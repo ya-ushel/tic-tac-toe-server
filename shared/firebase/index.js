@@ -5,6 +5,7 @@ const {
   setDoc: setDocFb,
   addDoc: addDocFb,
   getDoc: getDocFb,
+  deleteDoc: deleteDocFb,
   query,
   where,
   doc,
@@ -49,5 +50,11 @@ const setDoc = async (collectionName, id, data) => {
   await setDocFb(doc(db, collectionName, id), data);
 };
 
+const deleteDoc = async (collectionName, id) => {
+  const db = getFirestore();
+
+  await deleteDocFb(doc(db, collectionName, id));
+};
+
 // export { getDoc, addDoc, setDoc, initFirebase, app };
-module.exports = { getDoc, addDoc, setDoc, initFirebase };
+module.exports = { getDoc, addDoc, setDoc, deleteDoc, initFirebase };
