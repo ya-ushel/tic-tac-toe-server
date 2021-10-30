@@ -7,8 +7,9 @@ const { GameModel } = require("../models");
 module.exports = {
   createLobby: async function (req, res) {
     try {
-      const options = req.query.options || defaultGameOptions;
-      const name = req.query.name || "Default room name";
+      const { options = defaultGameOptions, name = "Default room name" } =
+        req.body;
+
       const hostId = req.get("userId");
       const playerList = [hostId];
 
@@ -38,7 +39,7 @@ module.exports = {
   joinLobby: async function (req, res) {
     try {
       const userId = req.get("userId");
-      const roomId = req.query.roomId;
+      const { roomId } = req.body;
 
       if (!userId) {
         res.send("error: userId undefined");
@@ -61,7 +62,7 @@ module.exports = {
   leaveLobby: async function (req, res) {
     try {
       const userId = req.get("userId");
-      const roomId = req.query.roomId;
+      const { roomId } = req.body;
 
       if (!userId) {
         res.send("error: userId undefined");
@@ -112,7 +113,7 @@ module.exports = {
   },
   startGame: async function (req, res) {
     const userId = req.get("userId");
-    const roomId = req.query.roomId;
+    const { roomId } = req.body;
     console.log(roomId);
 
     if (!roomId) {
