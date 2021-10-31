@@ -8,8 +8,10 @@ const cors = require("cors");
 
 const port = process.env.PORT || 8080;
 const server = http.Server(app).listen(port);
+
 const { initSockets } = require("./handlers/sockets");
 const { initFirebase } = require("../shared/firebase");
+
 const {
   createLobby,
   joinLobby,
@@ -52,3 +54,5 @@ app.post("/rooms/leave", leaveLobby);
 app.get("/rooms/list", getRooms);
 app.get("/rooms/start", startGame);
 // app.get("/users/list", getUsers);
+
+// server.listen(port, () => console.log(`Listening on port ${port}`));
