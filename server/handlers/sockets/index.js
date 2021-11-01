@@ -1,6 +1,7 @@
 const socketIo = require("socket.io");
 
 const { registerUserHandlers } = require("./registerUserHandlers");
+const { registerRoomHandlers } = require("./registerRoomHandlers");
 
 const initSockets = (server) => {
   const io = socketIo(server, {
@@ -13,13 +14,7 @@ const initSockets = (server) => {
     console.log("a user connected", userId);
 
     registerUserHandlers(io, socket, userId);
-
-    socket.on("message", () => {
-      console.log("user.joined message");
-    });
-    socket.on("user.joined", () => {
-      console.log("user.joined");
-    });
+    registerRoomHandlers(io, socket, userId);
   });
 };
 

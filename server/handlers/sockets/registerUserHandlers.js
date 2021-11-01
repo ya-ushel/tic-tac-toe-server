@@ -5,6 +5,8 @@ const {
   deleteDoc,
 } = require("../../../shared/firebase");
 
+const { getUsersOnline } = require("../../../shared/firebase/users");
+
 const registerUserHandlers = async (io, socket, userId) => {
   //   const getUsers = () => {
   //     io.in(socket.roomId).emit("users", users);
@@ -31,10 +33,17 @@ const registerUserHandlers = async (io, socket, userId) => {
   const setUserOnline = async (value) => {
     const user = await getDoc("users", userId);
 
+    user.socketId = socket.id;
     user.online = value;
-
     await setDoc("users", userId, user);
+
+    const usersOnline = await getUsersOnline();
+    io.emit(`user.${value ? "joined" : "left"}`, usersOnline);
   };
+
+  socket.on("message", () => {
+    console.log("user message");
+  });
 
   await setUserOnline(true);
 

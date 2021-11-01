@@ -147,17 +147,20 @@ module.exports = {
     //   return;
     // }
 
-    room.status = "started";
-
-    await setDoc("rooms", roomId, room);
-
     const gameProps = {
+      name: room.name,
       settings: room.options,
       players: room.playerList,
       hostId: room.hostId,
     };
     const game = new GameModel(gameProps);
     const gameModel = game.get();
+
+    room.status = "started";
+    room.gameId = gameModel.id || "111";
+
+    console.log("roooooom", room);
+    await setDoc("rooms", roomId, room);
 
     await setDoc("games", gameModel.id, gameModel);
 

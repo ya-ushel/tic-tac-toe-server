@@ -18,7 +18,8 @@ const {
   leaveLobby,
   getRooms,
   startGame,
-} = require("./routes");
+} = require("./routes/rooms");
+const { getGame } = require("./routes/games");
 
 const corsOptions = {
   origin: "*",
@@ -53,6 +54,7 @@ app.post("/rooms/join", joinLobby);
 app.post("/rooms/leave", leaveLobby);
 app.get("/rooms/list", getRooms);
 app.get("/rooms/start", startGame);
-// app.get("/users/list", getUsers);
+
+app.get("/games/get", getGame);
 
 // server.listen(port, () => console.log(`Listening on port ${port}`));
