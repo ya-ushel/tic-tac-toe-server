@@ -8,19 +8,17 @@ import SocketIO from "socket.io-client";
 
 Vue.config.productionTip = false;
 
-initFirebase();
-
-Vue.use(
-  new VueSocketIO({
-    debug: true,
-    connection: SocketIO("https://tic-tac-toe-1337.herokuapp.com/"), //options object is Optional
-    vuex: {
-      store,
-      actionPrefix: "SOCKET_",
-      mutationPrefix: "SOCKET_",
-    },
-  })
-);
+// Vue.use(
+//   new VueSocketIO({
+//     debug: true,
+//     connection: SocketIO("https://tic-tac-toe-1337.herokuapp.com/"),
+//     vuex: {
+//       store,
+//       actionPrefix: "SOCKET_",
+//       mutationPrefix: "SOCKET_",
+//     },
+//   })
+// );
 
 new Vue({
   router,

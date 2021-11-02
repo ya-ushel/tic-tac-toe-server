@@ -27,19 +27,17 @@ export default {
   },
   actions: {
     getAllRooms({ commit }) {
-      axios
-        .get("https://tic-tac-toe-1337.herokuapp.com/rooms/list")
-        .then((response) => {
-          commit("setRooms", response.data);
-          response.data.forEach((room) => {
-            room.playerList.forEach((player) => {
-              if (player === this.state.user.user.id) {
-                commit("setUserRoom", room);
-              }
-            });
+      axios.get("/rooms/list").then((response) => {
+        commit("setRooms", response.data);
+        response.data.forEach((room) => {
+          room.playerList.forEach((player) => {
+            if (player === this.state.user.user.id) {
+              commit("setUserRoom", room);
+            }
           });
-          // commit("setUserRoom", response.data);
         });
+        // commit("setUserRoom", response.data);
+      });
     },
     createUserRooms({ commit }) {
       axios

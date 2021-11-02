@@ -7,7 +7,7 @@
       <div class="room-size">{{ data.index }}</div>
       <div class="room-lock">{{ data.index }}</div>
     </div>
-    <div v-if="getUserRoom.id === data.id" class="right-arrow"></div>
+    <!-- <div v-if="getUserRoom.id === data.id" class="right-arrow"></div> -->
   </div>
 </template>
 

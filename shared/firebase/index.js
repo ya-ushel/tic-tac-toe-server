@@ -9,12 +9,29 @@ const {
   where,
   doc,
 } = require("firebase/firestore");
+const {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+} = require("firebase/auth");
 
 const { firebaseConfig } = require("../config");
 let app = null;
 const initFirebase = () => {
   console.log("initFirebase");
   app = initializeApp(firebaseConfig);
+};
+
+const createUser = () => {
+  const auth = getAuth();
+
+  signInAnonymously(auth)
+    .then(() => {})
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(error, "error");
+    });
 };
 
 const addDoc = async (collectionName, data) => {
@@ -49,5 +66,5 @@ const setDoc = async (collectionName, id, data) => {
   await setDocFb(doc(db, collectionName, id), data);
 };
 
-// export { getDoc, addDoc, setDoc, initFirebase, app };
-module.exports = { getDoc, addDoc, setDoc, initFirebase };
+export { createUser, getDoc, addDoc, setDoc, initFirebase, app };
+// module.exports = { getDoc, addDoc, setDoc, initFirebase };

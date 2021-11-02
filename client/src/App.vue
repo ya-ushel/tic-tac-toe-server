@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <router-view />
+    <!-- <router-view /> -->
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import Lobby from "./pages/Lobby.vue";
-import { checkAuthState, createUser } from "./firebase";
+import { checkAuthState } from "./firebase";
 
 export default {
   name: "App",
@@ -19,36 +19,33 @@ export default {
   methods: {
     getterUser() {
       let login = localStorage.getItem("login");
-
       if (login === null) {
-        createUser();
-        checkAuthState("qwe");
+        checkAuthState(Date.now());
       }
-
       let user = {
         login: localStorage.getItem("login"),
         id: localStorage.getItem("id"),
       };
-
       this.$store.commit("setUser", user);
+
+      this.getStateGame
+        ? this.$router.push({ name: "Board" }).catch((err) => {})
+        : this.$router.push({ name: "Lobby" }).catch((err) => {});
       // this.$socket.emit("userJoined", user);
     },
   },
-  sockets: {
-    connect: function() {
-      console.log("socket connected");
-    },
-    customEmit: function(data) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-      );
-    },
-  },
+  // sockets: {
+  //   connect: function() {
+  //     console.log("socket connected");
+  //   },
+  //   customEmit: function(data) {
+  //     console.log(
+  //       'this method was fired by the socket server. eg: io.emit("customEmit", data)'
+  //     );
+  //   },
+  // },
   mounted() {
     this.getterUser();
-    this.getStateGame
-      ? this.$router.push({ name: "Board" }).catch((err) => {})
-      : this.$router.push({ name: "Lobby" }).catch((err) => {});
   },
 };
 </script>
