@@ -25,12 +25,11 @@ const getUsersOnline = async () => {
 const getUsersById = async (ids) => {
   try {
     const db = getFirestore();
-    console.log("ids", ids);
+
     const q = query(collection(db, "users"), where("id", "in", ids));
 
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
-      console.log("querySnapshot");
 
       const users = [];
       querySnapshot.forEach((doc) => {

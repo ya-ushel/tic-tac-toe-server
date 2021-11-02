@@ -40,7 +40,7 @@ const registerRoomHandlers = async (io, socket, userId) => {
       return;
     }
 
-    if (room.options.players > room.playerList.length) {
+    if (room.options.players > room.users.length) {
       return;
     }
 
@@ -51,20 +51,23 @@ const registerRoomHandlers = async (io, socket, userId) => {
 
     const gameProps = {
       settings: room.options,
-      players: room.playerList,
       hostId: room.hostId,
     };
+
     const game = new GameModel(gameProps);
+    const userIds = room.users.map(({ id }) => id);
+    console.log('userIds',userIds)
+    await game.addPlayers(userIds);
+
     const gameModel = game.get();
 
     room.status = "started";
     room.gameId = gameModel.id;
 
     await setDoc("rooms", roomId, room);
-
     await setDoc("games", gameModel.id, gameModel);
 
-    const users = await getUsersById(gameModel.players);
+    const users = await getUsersById(userIds);
 
     users.forEach((user) => {
       console.log("sent to", user.id);

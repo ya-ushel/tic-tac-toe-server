@@ -7,13 +7,13 @@ const { GameModel } = require("../models");
 module.exports = {
   createLobby: async function (req, res) {
     try {
-      console.log("req body", req.body);
       const { options = defaultGameOptions, name = "Default room name" } =
         req.body;
 
-      console.log("options, name", options, name);
+      console.log("createLobby options, name", options, name);
       const hostId = req.get("userId");
-      const playerList = [hostId];
+      const host = await getDoc("users", hostId);
+      const users = [host];
 
       if (!hostId) {
         res.send("error: userId undefined");
@@ -24,7 +24,7 @@ module.exports = {
         status: "created",
         name,
         hostId,
-        playerList,
+        users,
         options,
       };
 
@@ -54,7 +54,9 @@ module.exports = {
         return;
       }
       const room = await getDoc("rooms", roomId);
-      room.playerList.push(userId);
+      const user = await getDoc("users", userId);
+
+      room.users.push(user);
 
       const newLobby = await setDoc("rooms", roomId, room);
       res.json(newLobby);
@@ -79,19 +81,19 @@ module.exports = {
       }
       const room = await getDoc("rooms", roomId);
 
-      if (room.playerList.length === 1) {
+      if (room.users.length === 1) {
         await deleteDoc("rooms", roomId);
         res.send("deleted");
         return;
       }
 
       if (userId === room.hostId) {
-        room.hostId = room.playerList[0];
+        room.hostId = room.users[0];
       }
 
-      const playerList = room.playerList.filter((p) => p !== userId);
-      room.playerList = playerList;
-      console.log(playerList);
+      const users = room.users.filter((p) => p.id !== userId);
+      room.users = users;
+      console.log(users);
 
       const newLobby = await setDoc("rooms", roomId, room);
       res.json(newLobby);
@@ -121,49 +123,39 @@ module.exports = {
     }
   },
   startGame: async function (req, res) {
-    const userId = req.get("userId");
-    const { roomId } = req.body;
-    console.log(roomId);
-
-    if (!roomId) {
-      res.send("error: roomId undefined");
-      return;
-    }
-
-    const room = await getDoc("rooms", roomId);
-
-    if (!room) {
-      res.send("error: room doesnt exist");
-      return;
-    }
-
-    if (room.options.players > room.playerList.length) {
-      res.send("error: not enough players");
-      return;
-    }
-
-    // if (room.hostId !== userId) {
-    //   res.send("error");
-    //   return;
-    // }
-
-    const gameProps = {
-      name: room.name,
-      settings: room.options,
-      players: room.playerList,
-      hostId: room.hostId,
-    };
-    const game = new GameModel(gameProps);
-    const gameModel = game.get();
-
-    room.status = "started";
-    room.gameId = gameModel.id || "111";
-
-    console.log("roooooom", room);
-    await setDoc("rooms", roomId, room);
-
-    await setDoc("games", gameModel.id, gameModel);
-
-    res.send(gameModel);
+    //   const userId = req.get("userId");
+    //   const { roomId } = req.body;
+    //   console.log(roomId);
+    //   if (!roomId) {
+    //     res.send("error: roomId undefined");
+    //     return;
+    //   }
+    //   const room = await getDoc("rooms", roomId);
+    //   if (!room) {
+    //     res.send("error: room doesnt exist");
+    //     return;
+    //   }
+    //   if (room.options.players > room.playerList.length) {
+    //     res.send("error: not enough players");
+    //     return;
+    //   }
+    //   if (room.hostId !== userId) {
+    //     res.send("error");
+    //     return;
+    //   }
+    //   const gameProps = {
+    //     name: room.name,
+    //     settings: room.options,
+    //     players: room.playerList,
+    //     hostId: room.hostId,
+    //   };
+    //   const game = new GameModel(gameProps);
+    //   const gameModel = game.get();
+    //   room.status = "started";
+    //   room.gameId = gameModel.id;
+    //   console.log("roooooom", room);
+    //   await setDoc("rooms", roomId, room);
+    //   await setDoc("games", gameModel.id, gameModel);
+    //   res.send(gameModel);
   },
 };
