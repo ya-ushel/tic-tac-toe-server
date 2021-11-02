@@ -61,8 +61,8 @@ const registerGameHandlers = async (io, socket, userId) => {
     // });
   };
 
-  const playerMoved = async ({ id, gameId }) => {
-    console.log("playerMoved", id, gameId);
+  const playerMoved = async ({ id, gameId, ceilIndex }) => {
+    console.log("playerMoved", id, gameId, ceilIndex);
     const game = await getDoc("games", gameId);
     const player = game.players.find((p) => p.id === id);
     const currentPlayerId = game.state.currentPlayerId;
@@ -87,6 +87,8 @@ const registerGameHandlers = async (io, socket, userId) => {
 
       return sortedFiltredPlayers[nextPlayerIndex].id;
     };
+
+    game.state.board.data[ceilIndex].value = player.shape;
 
     const nextPlayerId = getNextPlayerId();
     console.log("nextPlayerId", nextPlayerId);

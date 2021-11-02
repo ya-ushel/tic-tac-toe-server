@@ -41,10 +41,6 @@ const registerUserHandlers = async (io, socket, userId) => {
     io.emit(`user.${value ? "joined" : "left"}`, usersOnline);
   };
 
-  socket.on("message", () => {
-    console.log("user message");
-  });
-
   await setUserOnline(true);
 
   socket.on("disconnect", async (reason) => {

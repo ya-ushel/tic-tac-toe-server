@@ -1,5 +1,6 @@
 const { Model } = require("./Model");
 const { GameModel } = require("./Game");
 const { GameStateModel } = require("./GameState");
+const { Board } = require("./Board");
 
-module.exports = { Model, GameModel, GameStateModel };
+module.exports = { Board, Model, GameModel, GameStateModel };
