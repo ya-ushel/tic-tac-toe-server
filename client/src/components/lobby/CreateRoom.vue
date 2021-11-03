@@ -32,7 +32,7 @@
         </select>
       </div>
     </div>
-    <button>Create room</button>
+    <button @click="createRoom">Create room</button>
   </div>
 </template>
 
@@ -58,7 +58,9 @@ export default {
   mounted() {
     console.log(this.getUser, "getUser");
   },
-  methods: {},
+  methods: {
+    createRoom() {},
+  },
 };
 </script>
 

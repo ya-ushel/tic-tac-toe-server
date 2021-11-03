@@ -3,25 +3,45 @@ const {
   collection,
   query,
   getDocs,
+  where,
 } = require("firebase/firestore");
 
-const getAllUsers = async () => {
+const getUsersOnline = async () => {
   const db = getFirestore();
-
-  const q = query(collection(db, "users"));
-
+  const q = query(collection(db, "users"), where("online", "==", true));
   const querySnapshot = await getDocs(q);
-  if (!querySnapshot.empty) {
-    console.log("querySnapshot");
 
-    const rooms = [];
+  if (!querySnapshot.empty) {
+    const users = [];
     querySnapshot.forEach((doc) => {
       console.log(doc.id, " => ", doc.data());
-      rooms.push(doc.data());
+      users.push(doc.data());
     });
-    return rooms;
+    return users;
   }
   return [];
 };
 
-module.exports = { getAllUsers };
+const getUsersById = async (ids) => {
+  try {
+    const db = getFirestore();
+
+    const q = query(collection(db, "users"), where("id", "in", ids));
+
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+
+      const users = [];
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, " => ", doc.data());
+        users.push(doc.data());
+      });
+      return users;
+    }
+    return [];
+  } catch (err) {
+    console.log("error", err);
+  }
+};
+
+module.exports = { getUsersOnline, getUsersById };

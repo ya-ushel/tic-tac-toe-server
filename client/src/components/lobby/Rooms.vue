@@ -1,9 +1,5 @@
 <template>
   <div class="rooms">
-    <!-- <button class="create-btn" @click="createRoom">
-        <p>new room</p>
-        <b>+</b>
-      </button> -->
     <h3>Rooms list</h3>
     <div class="header-string">
       <div class="header-string-number"></div>

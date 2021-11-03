@@ -1,4 +1,4 @@
-const { addDoc, setDoc, getDoc } = require("../../shared/firebase");
+const { addDoc, setDoc, getDoc, deleteDoc } = require("../../shared/firebase");
 const { getAllRooms } = require("../../shared/firebase/rooms");
 const { getAllUsers } = require("../../shared/firebase/users");
 const { defaultGameOptions } = require("../../shared/config");
@@ -7,10 +7,13 @@ const { GameModel } = require("../models");
 module.exports = {
   createLobby: async function (req, res) {
     try {
-      const options = req.query.options || defaultGameOptions;
-      const name = req.query.name || "Default room name";
+      const { options = defaultGameOptions, name = "Default room name" } =
+        req.body;
+
+      console.log("createLobby options, name", options, name);
       const hostId = req.get("userId");
-      const playerList = [hostId];
+      const host = await getDoc("users", hostId);
+      const users = [host];
 
       if (!hostId) {
         res.send("error: userId undefined");
@@ -21,7 +24,7 @@ module.exports = {
         status: "created",
         name,
         hostId,
-        playerList,
+        users,
         options,
       };
 
@@ -33,12 +36,13 @@ module.exports = {
       res.json(newLobby);
     } catch (error) {
       console.log("createLobby error", req, error);
+      res.json(error);
     }
   },
   joinLobby: async function (req, res) {
     try {
       const userId = req.get("userId");
-      const roomId = req.query.roomId;
+      const { roomId } = req.body;
 
       if (!userId) {
         res.send("error: userId undefined");
@@ -50,18 +54,21 @@ module.exports = {
         return;
       }
       const room = await getDoc("rooms", roomId);
-      room.playerList.push(userId);
+      const user = await getDoc("users", userId);
+
+      room.users.push(user);
 
       const newLobby = await setDoc("rooms", roomId, room);
       res.json(newLobby);
     } catch (error) {
       console.log("joinLobby error", req, error);
+      res.json(error);
     }
   },
   leaveLobby: async function (req, res) {
     try {
       const userId = req.get("userId");
-      const roomId = req.query.roomId;
+      const { roomId } = req.body;
 
       if (!userId) {
         res.send("error: userId undefined");
@@ -73,14 +80,26 @@ module.exports = {
         return;
       }
       const room = await getDoc("rooms", roomId);
-      const playerList = room.playerList.filter((p) => p !== userId);
-      room.playerList = playerList;
-      console.log(playerList);
+
+      if (room.users.length === 1) {
+        await deleteDoc("rooms", roomId);
+        res.send("deleted");
+        return;
+      }
+
+      if (userId === room.hostId) {
+        room.hostId = room.users[0];
+      }
+
+      const users = room.users.filter((p) => p.id !== userId);
+      room.users = users;
+      console.log(users);
 
       const newLobby = await setDoc("rooms", roomId, room);
       res.json(newLobby);
     } catch (error) {
       console.log("leaveLobby error", req, error);
+      res.json(error);
     }
   },
   getRooms: async function (req, res) {
@@ -90,6 +109,7 @@ module.exports = {
       res.json(rooms);
     } catch (err) {
       console.log(err);
+      res.json(error);
     }
   },
   getUsers: async function (req, res) {
@@ -99,49 +119,43 @@ module.exports = {
       res.json(users);
     } catch (err) {
       console.log(err);
+      res.json(error);
     }
   },
   startGame: async function (req, res) {
-    const userId = req.get("userId");
-    const roomId = req.query.roomId;
-    console.log(roomId);
-
-    if (!roomId) {
-      res.send("error: roomId undefined");
-      return;
-    }
-
-    const room = await getDoc("rooms", roomId);
-
-    if (!room) {
-      res.send("error: room doesnt exist");
-      return;
-    }
-
-    if (room.options.players > room.playerList.length) {
-      res.send("error: not enough players");
-      return;
-    }
-
-    // if (room.hostId !== userId) {
-    //   res.send("error");
-    //   return;
-    // }
-
-    room.status = "started";
-
-    await setDoc("rooms", roomId, room);
-
-    const gameProps = {
-      settings: room.options,
-      players: room.playerList,
-      hostId: room.hostId,
-    };
-    const game = new GameModel(gameProps);
-    const gameModel = game.get();
-
-    await setDoc("games", gameModel.id, gameModel);
-
-    res.send(gameModel);
+    //   const userId = req.get("userId");
+    //   const { roomId } = req.body;
+    //   console.log(roomId);
+    //   if (!roomId) {
+    //     res.send("error: roomId undefined");
+    //     return;
+    //   }
+    //   const room = await getDoc("rooms", roomId);
+    //   if (!room) {
+    //     res.send("error: room doesnt exist");
+    //     return;
+    //   }
+    //   if (room.options.players > room.playerList.length) {
+    //     res.send("error: not enough players");
+    //     return;
+    //   }
+    //   if (room.hostId !== userId) {
+    //     res.send("error");
+    //     return;
+    //   }
+    //   const gameProps = {
+    //     name: room.name,
+    //     settings: room.options,
+    //     players: room.playerList,
+    //     hostId: room.hostId,
+    //   };
+    //   const game = new GameModel(gameProps);
+    //   const gameModel = game.get();
+    //   room.status = "started";
+    //   room.gameId = gameModel.id;
+    //   console.log("roooooom", room);
+    //   await setDoc("rooms", roomId, room);
+    //   await setDoc("games", gameModel.id, gameModel);
+    //   res.send(gameModel);
   },
 };

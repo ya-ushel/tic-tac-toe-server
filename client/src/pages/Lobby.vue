@@ -2,9 +2,9 @@
   <div>
     <Header />
     <div class="content">
-      <UserList />
+      <!-- <UserList /> -->
       <Rooms />
-      <RoomInfo />
+      <!-- <RoomInfo /> -->
     </div>
   </div>
 </template>

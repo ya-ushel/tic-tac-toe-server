@@ -3,11 +3,14 @@
     <div class="room" @click="selectRoom">
       <div class="room-number">{{ index }}</div>
       <div class="room-name">{{ data.name }}</div>
-      <div class="room-players">{{ data.playerList.length }}</div>
+      <div class="room-players">{{ data.users.length }}</div>
       <div class="room-size">{{ data.index }}</div>
       <div class="room-lock">{{ data.index }}</div>
     </div>
-    <!-- <div v-if="getUserRoom.id === data.id" class="right-arrow"></div> -->
+    <div
+      v-if="getUserRoom && getUserRoom.id === data.id"
+      class="right-arrow"
+    ></div>
   </div>
 </template>
 

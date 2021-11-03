@@ -28,10 +28,12 @@ export default {
   actions: {
     getAllRooms({ commit }) {
       axios.get("/rooms/list").then((response) => {
+        console.log(response.data, "response.data");
         commit("setRooms", response.data);
         response.data.forEach((room) => {
-          room.playerList.forEach((player) => {
-            if (player === this.state.user.user.id) {
+          console.log(room, "room");
+          room.users.forEach((player) => {
+            if (player.id === this.state.user.user.id) {
               commit("setUserRoom", room);
             }
           });

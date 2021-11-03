@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {
-  addDoc,
+  setDoc,
   createUser,
   initFirebase,
   app,
@@ -19,7 +19,7 @@ export const checkAuthState = (login) => {
     if (user) {
       const uid = user.uid;
       const newUser = { user: login, id: uid };
-      addDoc("users", newUser);
+      setDoc("users", uid, newUser);
 
       localStorage.setItem("login", login);
       localStorage.setItem("id", uid);

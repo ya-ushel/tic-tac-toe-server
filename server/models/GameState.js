@@ -1,10 +1,6 @@
 const { Model } = require("./Model");
 
 class GameStateModel extends Model {
-  status = null;
-  board = {};
-  currentPlayerId = null;
-
   constructor(props) {
     super(props);
 

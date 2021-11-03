@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!-- <router-view /> -->
+    <router-view />
   </div>
 </template>
 
@@ -34,17 +34,18 @@ export default {
       // this.$socket.emit("userJoined", user);
     },
   },
-  // sockets: {
-  //   connect: function() {
-  //     console.log("socket connected");
-  //   },
-  //   customEmit: function(data) {
-  //     console.log(
-  //       'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-  //     );
-  //   },
-  // },
-  mounted() {
+  sockets: {
+    connect: function() {
+      console.log("socket connected");
+    },
+    customEmit: function(data) {
+      console.log(
+        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
+      );
+    },
+  },
+  beforeMount() {
+    console.log(this.$store.state.user.id, "store.state.user.id2");
     this.getterUser();
   },
 };

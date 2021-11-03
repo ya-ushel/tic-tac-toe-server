@@ -8,17 +8,22 @@ import SocketIO from "socket.io-client";
 
 Vue.config.productionTip = false;
 
-// Vue.use(
-//   new VueSocketIO({
-//     debug: true,
-//     connection: SocketIO("https://tic-tac-toe-1337.herokuapp.com/"),
-//     vuex: {
-//       store,
-//       actionPrefix: "SOCKET_",
-//       mutationPrefix: "SOCKET_",
-//     },
-//   })
-// );
+console.log(localStorage.getItem("id"), "store.state.user.id");
+
+Vue.use(
+  new VueSocketIO({
+    connection: SocketIO("https://tic-tac-toe-1337.herokuapp.com/", {
+      secure: true,
+      transports: ["websocket"],
+      query: { userId: "UlCjtIGuKHZkU7NjWvrGSY03IH33" },
+    }),
+    vuex: {
+      store,
+      actionPrefix: "SOCKET_",
+      mutationPrefix: "SOCKET_",
+    },
+  })
+);
 
 new Vue({
   router,

@@ -5,6 +5,7 @@ const {
   setDoc: setDocFb,
   addDoc: addDocFb,
   getDoc: getDocFb,
+  deleteDoc: deleteDocFb,
   query,
   where,
   doc,
@@ -53,7 +54,7 @@ const getDoc = async (collectionName, id) => {
   const docSnap = await getDocFb(docRef);
 
   if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
+    // console.log("Document data:", docSnap.data());
     return docSnap.data();
   } else {
     console.log("No such document!");

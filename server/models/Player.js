@@ -1,13 +1,16 @@
-class Player {
-  id = null;
-  symbol = null;
-  name = null;
-  avatar = null;
+const { Model } = require("./Model");
 
+const defaultShapes = ["cross", "circle", "triangle"];
+const defaultColors = ["#e63946", "#457b9d", "#52b788"];
+class Player extends Model {
   constructor(props) {
-    this.id = props.id;
-    this.symbol = props.symbol;
-    this.name = props.name;
-    this.avatar = props.avatar;
+    super(props);
+
+    this.add("score", 0);
+    this.add("status", "created");
+    this.add("shape", defaultShapes[props.position]);
+    this.add("color", defaultColors[props.position]);
   }
 }
+
+module.exports = { Player };
