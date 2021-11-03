@@ -16,17 +16,47 @@ class GameModel extends Model {
     this.add("state", state);
   }
 
-  addPlayers = async (ids) => {
+  addPlayers = async (ids, localPlayers) => {
+    if (localPlayers.length) {
+      this.addLocalPlayers(localPlayers);
+      return;
+    }
+
     const players = [];
+    let index = 0;
 
-    ids.forEach(async (id, index) => {
+    const setPlayer = async (id) => {
+      console.log("add player", id);
       const user = await getDoc("users", id);
-      const player = new Player({ ...user, position: index }).get();
-
+      const player = new Player({
+        ...user,
+        position: index,
+        local: false,
+      }).get();
+      console.log("add player player", player);
       players.push(player);
-    });
+      index++;
+    };
+
+    const promises = ids.map(setPlayer);
+
+    await Promise.all(promises);
 
     this.add("players", players);
+  };
+
+  addLocalPlayers = async (players) => {
+    const playersArr = players.map((local, index) => {
+      const player = new Player({
+        ...local,
+        position: index,
+        local: true,
+      }).get();
+      console.log("player.player.player", player);
+      return player;
+    });
+
+    this.add("players", playersArr);
   };
 }
 

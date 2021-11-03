@@ -8,11 +8,13 @@ const initSockets = (server) => {
   const io = socketIo(server, {
     upgradeTimeout: 30000,
     rejectUnauthorized: false,
+    allowEIO3: true,
   });
 
   io.on("connection", async (socket) => {
-    const { userId } = socket.handshake?.auth;
-    console.log("a user connected", userId);
+    const userId =
+      socket.handshake?.auth?.userId || socket.handshake?.query?.userId;
+    console.log("a user connected", userId, socket.handshake);
 
     registerUserHandlers(io, socket, userId);
     registerRoomHandlers(io, socket, userId);
