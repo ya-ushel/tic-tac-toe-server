@@ -99,42 +99,43 @@ const registerGameHandlers = async (io, socket, userId) => {
       while (board.length) board2d.push(board.splice(0, boardSize));
 
       for (let i = 0; i < boardSize; i++) {
-        let matched = 0;
-        for (let j = 0; j < boardSize; j++) {
-          const ceil = board2d[i][j];
+        let xMatched = 0;
+        let yMatched = 0;
 
-          if (ceil.value === playerShape || ceil.index === ceilIndex) {
-            matched++;
-            matchedCeils.push({ matched, index: ceil.index });
+        for (let j = 0; j < boardSize; j++) {
+          const xCeil = board2d[i][j];
+          const yCeil = board2d[j][i];
+
+          if (xCeil.value === playerShape || xCeil.index === ceilIndex) {
+            xMatched++;
+            matchedCeils.push(xCeil);
           } else {
-            matched = 0;
+            matchedCeils.length = 0;
+            xMatched = 0;
           }
 
-          if (matched === 3) {
+          if (xMatched === 3) {
             score++;
-            matched = 0;
+            xMatched = 0;
+            matchedCeils.forEach((c) => {
+              console.log("matchedCeils", c);
+              gameBoard[c.index].matched = true;
+            });
+            matchedCeils.length = 0;
+          }
+
+          if (yCeil.value === playerShape || yCeil.index === ceilIndex) {
+            yMatched++;
+          } else {
+            yMatched = 0;
+          }
+
+          if (yMatched === 3) {
+            score++;
+            yMatched = 0;
           }
         }
       }
-      for (let i = 0; i < boardSize; i++) {
-        let matched = 0;
-        for (let j = 0; j < boardSize; j++) {
-          const ceil = board2d[j][i];
-
-          if (ceil.value === playerShape || ceil.index === ceilIndex) {
-            matched++;
-            matchedCeils.push({ matched, index: ceil.index });
-          } else {
-            matched = 0;
-          }
-
-          if (matched === 3) {
-            score++;
-            matched = 0;
-          }
-        }
-      }
-      console.log(board2d);
 
       return score;
     };
