@@ -8,6 +8,7 @@ const initSockets = (server) => {
   const io = socketIo(server, {
     upgradeTimeout: 30000,
     rejectUnauthorized: false,
+    allowEIO3: true,
   });
 
   io.on("connection", async (socket) => {
