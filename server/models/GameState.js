@@ -7,7 +7,7 @@ class GameStateModel extends Model {
 
     const board = new Board().get();
 
-    this.status = "created";
+    this.status = props.settings.localGame ? "started" : "created";
     this.currentPlayerId = props.hostId;
     this.board = board;
 

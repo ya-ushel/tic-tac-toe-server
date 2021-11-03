@@ -40,7 +40,7 @@ const registerRoomHandlers = async (io, socket, userId) => {
       return;
     }
 
-    if (room.options.players > room.users.length) {
+    if (room.options.players > room.users.length && !room.options.localGame) {
       return;
     }
 
@@ -54,10 +54,13 @@ const registerRoomHandlers = async (io, socket, userId) => {
       hostId: room.hostId,
     };
 
+    const userModel = await getDoc("users", userId);
+    const userCopy = { ...userModel, localPlayers: null };
+
     const game = new GameModel(gameProps);
     const userIds = room.users.map(({ id }) => id);
-    console.log('userIds userIds userIds',userIds)
-    await game.addPlayers(userIds);
+
+    await game.addPlayers(userIds, [userCopy, ...room.options.localPlayers]);
 
     const gameModel = game.get();
 
@@ -67,13 +70,17 @@ const registerRoomHandlers = async (io, socket, userId) => {
     await setDoc("rooms", roomId, room);
     await setDoc("games", gameModel.id, gameModel);
 
-    const users = await getUsersById(userIds);
+    if (!room.options.localGame) {
+      const users = await getUsersById(userIds);
 
-    users.forEach((user) => {
-      console.log("sent to", user.id);
+      users.forEach((user) => {
+        console.log("sent to", user.id);
 
-      io.to(user.socketId).emit("room.started", gameModel.id);
-    });
+        io.to(user.socketId).emit("room.started", gameModel.id);
+      });
+    } else {
+      io.to(socket.id).emit("room.started", gameModel.id);
+    }
   };
 
   socket.on("room.created", roomCreated);

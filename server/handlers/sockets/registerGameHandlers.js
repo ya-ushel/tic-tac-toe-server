@@ -66,9 +66,11 @@ const registerGameHandlers = async (io, socket, userId) => {
     const game = await getDoc("games", gameId);
     const { data: gameBoard, size: boardSize } = game.state.board;
     const player = game.players.find((p) => p.id === id);
-    const currentPlayerId = game.state.currentPlayerId;
+    const currentPlayerId = game.settings.localGame
+      ? id
+      : game.state.currentPlayerId;
 
-    if (currentPlayerId !== id) {
+    if (currentPlayerId !== id && !game.settings.localGame) {
       return;
     }
 
@@ -95,44 +97,158 @@ const registerGameHandlers = async (io, socket, userId) => {
       const playerShape = shape;
       const board = [...gameBoard];
       const board2d = [];
-      const matchedCeils = [];
       while (board.length) board2d.push(board.splice(0, boardSize));
 
       for (let i = 0; i < boardSize; i++) {
         let xMatched = 0;
         let yMatched = 0;
+        let zMatched = 0;
+        let aMatched = 0;
+        let bMatched = 0;
+        let cMatched = 0;
+
+        const xMatchedCeils = [];
+        const yMatchedCeils = [];
+        const zMatchedCeils = [];
+        const aMatchedCeils = [];
+        const bMatchedCeils = [];
+        const cMatchedCeils = [];
 
         for (let j = 0; j < boardSize; j++) {
+          const iter = i + j > boardSize - 1 ? boardSize - 1 : i + j;
+
           const xCeil = board2d[i][j];
           const yCeil = board2d[j][i];
 
+          const zCeil = board2d[j][j + i];
+          const bCeil = board2d[iter][j];
+
+          const aCeil = board2d[boardSize - j - 1][j - i];
+          const cCeil = board2d[iter][boardSize - j - 1];
+
+          /// ----- x ------
+
           if (xCeil.value === playerShape || xCeil.index === ceilIndex) {
             xMatched++;
-            matchedCeils.push(xCeil);
+            xMatchedCeils.push(xCeil);
           } else {
-            matchedCeils.length = 0;
+            xMatchedCeils.length = 0;
             xMatched = 0;
           }
 
           if (xMatched === 3) {
             score++;
             xMatched = 0;
-            matchedCeils.forEach((c) => {
+            xMatchedCeils.forEach((c) => {
               console.log("matchedCeils", c);
               gameBoard[c.index].matched = true;
             });
-            matchedCeils.length = 0;
+            xMatchedCeils.length = 0;
           }
+
+          /// ----- y ------
 
           if (yCeil.value === playerShape || yCeil.index === ceilIndex) {
             yMatched++;
+            yMatchedCeils.push(yCeil);
           } else {
+            yMatchedCeils.length = 0;
+
             yMatched = 0;
           }
 
           if (yMatched === 3) {
             score++;
             yMatched = 0;
+            yMatchedCeils.forEach((c) => {
+              console.log("matchedCeils", c);
+              gameBoard[c.index].matched = true;
+            });
+            yMatchedCeils.length = 0;
+          }
+
+          /// ----- z ------
+
+          if (zCeil?.value === playerShape || zCeil?.index === ceilIndex) {
+            zMatched++;
+            zMatchedCeils.push(zCeil);
+          } else {
+            zMatchedCeils.length = 0;
+
+            zMatched = 0;
+          }
+
+          if (zMatched === 3) {
+            score++;
+            zMatched = 0;
+            zMatchedCeils.forEach((c) => {
+              console.log("matchedCeils", c);
+              gameBoard[c.index].matched = true;
+            });
+            zMatchedCeils.length = 0;
+          }
+
+          /// ----- a ------
+
+          if (aCeil?.value === playerShape || aCeil?.index === ceilIndex) {
+            aMatched++;
+            aMatchedCeils.push(aCeil);
+          } else {
+            aMatchedCeils.length = 0;
+
+            aMatched = 0;
+          }
+
+          if (aMatched === 3) {
+            score++;
+            aMatched = 0;
+            aMatchedCeils.forEach((c) => {
+              console.log("matchedCeils", c);
+              gameBoard[c.index].matched = true;
+            });
+            aMatchedCeils.length = 0;
+          }
+
+          /// ----- b ------
+
+          if (bCeil?.value === playerShape || bCeil?.index === ceilIndex) {
+            bMatched++;
+            bMatchedCeils.push(bCeil);
+          } else {
+            bMatchedCeils.length = 0;
+
+            bMatched = 0;
+          }
+
+          if (bMatched === 3) {
+            score++;
+            bMatched = 0;
+            bMatchedCeils.forEach((c) => {
+              console.log("matchedCeils", c);
+              gameBoard[c.index].matched = true;
+            });
+            bMatchedCeils.length = 0;
+          }
+
+          /// ----- c ------
+
+          if (cCeil?.value === playerShape || cCeil?.index === ceilIndex) {
+            cMatched++;
+            cMatchedCeils.push(cCeil);
+          } else {
+            cMatchedCeils.length = 0;
+
+            cMatched = 0;
+          }
+
+          if (cMatched === 3) {
+            score++;
+            cMatched = 0;
+            cMatchedCeils.forEach((c) => {
+              console.log("matchedCeils", c);
+              gameBoard[c.index].matched = true;
+            });
+            cMatchedCeils.length = 0;
           }
         }
       }

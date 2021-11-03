@@ -7,10 +7,9 @@ const { GameModel } = require("../models");
 module.exports = {
   createLobby: async function (req, res) {
     try {
-      const { options = defaultGameOptions, name = "Default room name" } =
-        req.body;
+      const { options = defaultGameOptions } = req.body;
 
-      console.log("createLobby options, name", options, name);
+      console.log("createLobby options, name", options, options.name);
       const hostId = req.get("userId");
       const host = await getDoc("users", hostId);
       const users = [host];
@@ -22,7 +21,7 @@ module.exports = {
 
       const newLobby = {
         status: "created",
-        name,
+        name: options.name,
         hostId,
         users,
         options,
