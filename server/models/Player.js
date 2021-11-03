@@ -1,6 +1,6 @@
 const { Model } = require("./Model");
 
-const defaultShapes = ["cross", "circle", "triangle"];
+const defaultShapes = ["cross", "circle", "triangle", "square"];
 const defaultColors = [
   "#e63946",
   "#457b9d",
