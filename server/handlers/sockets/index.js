@@ -12,7 +12,8 @@ const initSockets = (server) => {
   });
 
   io.on("connection", async (socket) => {
-    const { userId } = socket.handshake?.auth;
+    const userId =
+      socket.handshake?.auth?.userId || socket.handshake?.query?.userId;
     console.log("a user connected", userId, socket.handshake);
 
     registerUserHandlers(io, socket, userId);
