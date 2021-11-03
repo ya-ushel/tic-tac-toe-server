@@ -56,7 +56,7 @@ const registerRoomHandlers = async (io, socket, userId) => {
 
     const game = new GameModel(gameProps);
     const userIds = room.users.map(({ id }) => id);
-    console.log('userIds',userIds)
+    console.log('userIds userIds userIds',userIds)
     await game.addPlayers(userIds);
 
     const gameModel = game.get();

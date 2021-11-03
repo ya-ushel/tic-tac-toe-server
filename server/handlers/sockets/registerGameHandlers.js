@@ -64,6 +64,7 @@ const registerGameHandlers = async (io, socket, userId) => {
   const playerMoved = async ({ id, gameId, ceilIndex }) => {
     console.log("playerMoved", id, gameId, ceilIndex);
     const game = await getDoc("games", gameId);
+    const { data: gameBoard, size: boardSize } = game.state.board;
     const player = game.players.find((p) => p.id === id);
     const currentPlayerId = game.state.currentPlayerId;
 
@@ -88,7 +89,60 @@ const registerGameHandlers = async (io, socket, userId) => {
       return sortedFiltredPlayers[nextPlayerIndex].id;
     };
 
-    game.state.board.data[ceilIndex].value = player.shape;
+    const calculateScore = (shape, ceilIndex) => {
+      console.log("calculateScore", shape);
+      let score = 0;
+      const playerShape = shape;
+      const board = [...gameBoard];
+      const board2d = [];
+      const matchedCeils = [];
+      while (board.length) board2d.push(board.splice(0, boardSize));
+
+      for (let i = 0; i < boardSize; i++) {
+        let matched = 0;
+        for (let j = 0; j < boardSize; j++) {
+          const ceil = board2d[i][j];
+
+          if (ceil.value === playerShape || ceil.index === ceilIndex) {
+            matched++;
+            matchedCeils.push({ matched, index: ceil.index });
+          } else {
+            matched = 0;
+          }
+
+          if (matched === 3) {
+            score++;
+            matched = 0;
+          }
+        }
+      }
+      for (let i = 0; i < boardSize; i++) {
+        let matched = 0;
+        for (let j = 0; j < boardSize; j++) {
+          const ceil = board2d[j][i];
+
+          if (ceil.value === playerShape || ceil.index === ceilIndex) {
+            matched++;
+            matchedCeils.push({ matched, index: ceil.index });
+          } else {
+            matched = 0;
+          }
+
+          if (matched === 3) {
+            score++;
+            matched = 0;
+          }
+        }
+      }
+      console.log(board2d);
+
+      return score;
+    };
+
+    gameBoard[ceilIndex].value = player.shape;
+
+    player.score = calculateScore(player.shape, ceilIndex);
+    console.log("calculateScore score", player.score);
 
     const nextPlayerId = getNextPlayerId();
     console.log("nextPlayerId", nextPlayerId);
