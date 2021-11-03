@@ -13,7 +13,7 @@ const initSockets = (server) => {
 
   io.on("connection", async (socket) => {
     const { userId } = socket.handshake?.auth;
-    console.log("a user connected", userId);
+    console.log("a user connected", userId, socket.handshake);
 
     registerUserHandlers(io, socket, userId);
     registerRoomHandlers(io, socket, userId);
