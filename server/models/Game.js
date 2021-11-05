@@ -16,8 +16,8 @@ class GameModel extends Model {
     this.add("state", state);
   }
 
-  addPlayers = async (ids, localPlayers) => {
-    if (localPlayers.length) {
+  addPlayers = async (ids, localGame = false, localPlayers) => {
+    if (localGame) {
       this.addLocalPlayers(localPlayers);
       return;
     }
@@ -26,14 +26,13 @@ class GameModel extends Model {
     let index = 0;
 
     const setPlayer = async (id) => {
-      console.log("add player", id);
       const user = await getDoc("users", id);
       const player = new Player({
         ...user,
         position: index,
         local: false,
       }).get();
-      console.log("add player player", player);
+
       players.push(player);
       index++;
     };
@@ -52,7 +51,7 @@ class GameModel extends Model {
         position: index,
         local: true,
       }).get();
-      console.log("player.player.player", player);
+
       return player;
     });
 

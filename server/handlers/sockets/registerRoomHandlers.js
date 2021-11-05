@@ -60,7 +60,10 @@ const registerRoomHandlers = async (io, socket, userId) => {
     const game = new GameModel(gameProps);
     const userIds = room.users.map(({ id }) => id);
 
-    await game.addPlayers(userIds, [userCopy, ...room.options.localPlayers]);
+    await game.addPlayers(userIds, room.options.localGame, [
+      userCopy,
+      ...room.options.localPlayers,
+    ]);
 
     const gameModel = game.get();
 

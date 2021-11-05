@@ -1,6 +1,15 @@
 const { Model } = require("./Model");
 
-const defaultShapes = ["cross", "circle", "triangle", "square"];
+const defaultShapes = [
+  "cross",
+  "circle",
+  "triangle",
+  "square",
+  "hexagon",
+  "romb",
+  "triangle-down",
+  "plus",
+];
 const defaultColors = [
   "#e63946",
   "#457b9d",
@@ -8,6 +17,8 @@ const defaultColors = [
   "#f07167",
   "#a01a58",
   "#15616d",
+  "#fca311",
+  "#9d4edd",
 ];
 class Player extends Model {
   constructor(props) {
