@@ -56,6 +56,7 @@ module.exports = {
       const user = await getDoc("users", userId);
 
       room.users.push(user);
+      console.log("roomroomroom", room);
 
       const newLobby = await setDoc("rooms", roomId, room);
       res.json(newLobby);

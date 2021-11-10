@@ -5,6 +5,10 @@ class GameStateModel extends Model {
   constructor(props) {
     super(props);
 
+    if (props.id) {
+      return;
+    }
+
     const board = new Board({ size: props.settings.boardSize }).get();
 
     this.turn = 0;
