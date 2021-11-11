@@ -12,8 +12,11 @@ const {
 } = require("../../../shared/firebase/users");
 
 const registerGameHandlers = async (io, socket, userId) => {
-  const playerTiped = async ({ gameId, data }) => {
-    io.to(`game-${gameId}`).emit("player.tiped", { from: userId, to: data });
+  const playerTiped = async ({ gameId, playerId }) => {
+    io.to(`game-${gameId}`).emit("player.tiped", {
+      from: userId,
+      to: playerId,
+    });
   };
 
   const playerJoined = async ({ id, gameId }) => {
@@ -51,7 +54,7 @@ const registerGameHandlers = async (io, socket, userId) => {
 
     console.log("player:", player);
     await setDoc("games", game.id, game);
-    io.emit("player.leaved", { game });
+    io.to(`game-${gameId}`).emit("player.leaved", { game });
 
     // const users = await getUsersById(playerIds);
 

@@ -18,6 +18,7 @@ const {
   leaveLobby,
   getRooms,
   startGame,
+  editRoom,
 } = require("./routes/rooms");
 const { getGame } = require("./routes/games");
 
@@ -51,6 +52,7 @@ app.get("/", (req, res) => {
 
 app.post("/rooms/create", createLobby);
 app.post("/rooms/join", joinLobby);
+app.post("/rooms/edit", editRoom);
 app.post("/rooms/leave", leaveLobby);
 app.get("/rooms/list", getRooms);
 app.get("/rooms/start", startGame);

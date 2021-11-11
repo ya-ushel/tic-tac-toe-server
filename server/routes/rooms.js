@@ -9,7 +9,6 @@ module.exports = {
     try {
       const { options = defaultGameOptions } = req.body;
 
-      console.log("createLobby options, name", options, options.name);
       const hostId = req.get("userId");
       const host = await getDoc("users", hostId);
       const users = [host];
@@ -99,6 +98,37 @@ module.exports = {
       res.json(newLobby);
     } catch (error) {
       console.log("leaveLobby error", req, error);
+      res.json(error);
+    }
+  },
+  editRoom: async function (req, res) {
+    try {
+      const { roomId, options } = req.body;
+      const hostId = req.get("userId");
+
+      if (!hostId) {
+        res.send("error: userId undefined");
+        return;
+      }
+
+      if (!roomId) {
+        res.send("error: roomId undefined");
+        return;
+      }
+
+      if (!options) {
+        res.send("options: userId undefined");
+        return;
+      }
+
+      const room = await getDoc("rooms", roomId);
+
+      room.options = options;
+
+      await setDoc("rooms", roomId, room);
+      res.json(room);
+    } catch (err) {
+      console.log(err);
       res.json(error);
     }
   },
