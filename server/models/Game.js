@@ -15,9 +15,12 @@ class GameModel extends Model {
 
     const id = uid();
     const state = new GameStateModel(props).get();
+    const createdAt = new Date();
 
     this.add("id", id);
     this.add("state", state);
+    this.add("createdAt", createdAt);
+    this.add("lastMoveTime", Date.now());
   }
 
   addPlayers = async (ids, localGame = false, localPlayers) => {

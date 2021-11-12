@@ -34,7 +34,10 @@ const registerGameHandlers = async (io, socket, userId) => {
 
     await setDoc("games", game.id, game);
 
-    if (game.settings.players === joinedPlayers.length) {
+    if (
+      game.settings.players === joinedPlayers.length &&
+      game.state.status !== "finished"
+    ) {
       game.state.status = "started";
       await setDoc("games", game.id, game);
 
@@ -52,7 +55,7 @@ const registerGameHandlers = async (io, socket, userId) => {
 
     player.status = "leaved";
 
-    console.log("player:", player);
+    console.log("player: game game", game);
     await setDoc("games", game.id, game);
     io.to(`game-${gameId}`).emit("player.leaved", { game });
 
@@ -85,6 +88,7 @@ const registerGameHandlers = async (io, socket, userId) => {
     const freeCeils = gameModel.getFreeCeils();
 
     player.score = gameModel.calculateScore(player.id, ceilIndex);
+    player.spentTime = player.spentTime + Date.now() - game.lastMoveTime;
 
     const nextPlayerId = gameModel.getNextPlayerId();
 
@@ -92,6 +96,7 @@ const registerGameHandlers = async (io, socket, userId) => {
     game.state.turn = game.state.turn + 1;
     game.state.round = parseInt(game.state.turn / game.settings.players);
     game.state.status = !freeCeils.length ? "finished" : game.state.status;
+    game.lastMoveTime = Date.now();
 
     await setDoc("games", game.id, game);
     // console.log("game.updated", game);

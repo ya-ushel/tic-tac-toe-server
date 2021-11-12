@@ -33,6 +33,10 @@ const registerUserHandlers = async (io, socket, userId) => {
   const setUserOnline = async (value) => {
     const user = await getDoc("users", userId);
 
+    if (!user) {
+      return;
+    }
+
     user.socketId = socket.id;
     user.online = value;
     await setDoc("users", userId, user);

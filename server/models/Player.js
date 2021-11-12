@@ -25,6 +25,7 @@ class Player extends Model {
     super(props);
 
     this.add("score", 0);
+    this.add("spentTime", 0);
     this.add("status", props.local ? "joined" : "created");
     this.add("shape", defaultShapes[props.position] || defaultShapes[0]);
     this.add("color", defaultColors[props.position] || defaultColors[0]);
