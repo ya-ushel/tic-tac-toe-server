@@ -374,6 +374,27 @@ class GameModel extends Model {
     return playerIndex + 1 <= players.length / 2 ? difference : -difference;
   };
 
+  calculatePlaces = () => {
+    const { players } = this;
+    const sortedPlayers = players.sort(
+      (a, b) => b.score - a.score || a.spentTime - b.spentTime
+    );
+
+    let place = 1;
+    let maxScore = 0;
+
+    sortedPlayers.forEach((p, i) => {
+      // if (p.score === maxScore) {s
+      // }
+
+      p.place = place;
+      place++;
+      return p;
+    });
+
+    return sortedPlayers;
+  };
+
   finishGame = () => {
     this.state.status = "finished";
 
@@ -383,6 +404,8 @@ class GameModel extends Model {
         player.rating = player.rating + this.calculateRating(player.id);
       });
     }
+
+    this.players = this.calculatePlaces();
   };
 }
 

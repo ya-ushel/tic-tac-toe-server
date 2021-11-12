@@ -21,6 +21,7 @@ const {
   editRoom,
 } = require("./routes/rooms");
 const { getGame } = require("./routes/games");
+const { getLeaders } = require("./routes/users");
 
 const corsOptions = {
   origin: "*",
@@ -58,5 +59,7 @@ app.get("/rooms/list", getRooms);
 app.get("/rooms/start", startGame);
 
 app.get("/games/get", getGame);
+
+app.get("/users/leaders", getLeaders);
 
 // server.listen(port, () => console.log(`Listening on port ${port}`));

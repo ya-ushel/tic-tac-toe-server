@@ -13,6 +13,22 @@ const {
 
 const registerGameHandlers = async (io, socket, userId) => {
   const playerTiped = async ({ gameId, playerId }) => {
+    const user = await getDoc("users", userId);
+    const tipedUser = await getDoc("users", playerId);
+
+    if (user.coins < 50 || !tipedUser) {
+      return;
+    }
+
+    user.coins = user.coins - 50;
+    tipedUser.coins = tipedUser.coins + 50;
+
+    await setDoc("users", userId, user);
+    await setDoc("users", playerId, tipedUser);
+
+    io.to(user.socketId).emit("user.updated", { user });
+    io.to(tipedUser.socketId).emit("user.updated", { user: tipedUser });
+
     io.to(`game-${gameId}`).emit("player.tiped", {
       from: userId,
       to: playerId,
@@ -113,8 +129,18 @@ const registerGameHandlers = async (io, socket, userId) => {
           io.to(user.socketId).emit("user.updated", { user });
         };
 
+        const addToHistory = async (userId) => {
+          const user = await getDoc("users", userId);
+
+          user.gameHistory.push(gameId);
+          await setDoc("users", userId, user);
+
+          io.to(user.socketId).emit("user.updated", { user });
+        };
+
         game.players.forEach((p) => {
           changeRating(p.id, p.rating);
+          addToHistory(p.id);
         });
       }
     }
