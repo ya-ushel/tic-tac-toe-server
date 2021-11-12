@@ -70,7 +70,7 @@ const registerGameHandlers = async (io, socket, userId) => {
 
   const playerMoved = async ({ id, gameId, ceilIndex }) => {
     console.log("playerMoved", id, gameId, ceilIndex);
-    const game = await getDoc("games", gameId);
+    let game = await getDoc("games", gameId);
     const { data: gameBoard, size: boardSize } = game.state.board;
     const player = game.players.find((p) => p.id === id);
     const currentPlayerId = game.settings.localGame
@@ -95,8 +95,29 @@ const registerGameHandlers = async (io, socket, userId) => {
     game.state.currentPlayerId = nextPlayerId;
     game.state.turn = game.state.turn + 1;
     game.state.round = parseInt(game.state.turn / game.settings.players);
-    game.state.status = !freeCeils.length ? "finished" : game.state.status;
     game.lastMoveTime = Date.now();
+
+    if (!freeCeils.length) {
+      const gameModel = new GameModel(game);
+
+      gameModel.finishGame();
+      game = gameModel.get();
+
+      if (!game.settings.localGame) {
+        const changeRating = async (userId, rating) => {
+          const user = await getDoc("users", userId);
+
+          user.rating = rating;
+          await setDoc("users", userId, user);
+
+          io.to(user.socketId).emit("user.updated", { user });
+        };
+
+        game.players.forEach((p) => {
+          changeRating(p.id, p.rating);
+        });
+      }
+    }
 
     await setDoc("games", game.id, game);
     // console.log("game.updated", game);

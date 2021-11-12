@@ -364,6 +364,26 @@ class GameModel extends Model {
 
     return sortedFiltredPlayers[nextPlayerIndex].id;
   };
+
+  calculateRating = (playerId) => {
+    const { players } = this;
+    const sortedPlayers = players.sort((a, b) => b.score - a.score);
+    const playerIndex = sortedPlayers.findIndex((p) => p.id === playerId);
+    const difference = 25;
+
+    return playerIndex + 1 <= players.length / 2 ? difference : -difference;
+  };
+
+  finishGame = () => {
+    this.state.status = "finished";
+
+    if (!this.settings.localGame) {
+      this.players.forEach((player) => {
+        player.oldRating = player.rating;
+        player.rating = player.rating + this.calculateRating(player.id);
+      });
+    }
+  };
 }
 
 module.exports = { GameModel };
