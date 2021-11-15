@@ -367,7 +367,7 @@ class GameModel extends Model {
 
   calculateRating = (playerId) => {
     const { players } = this;
-    const sortedPlayers = players.sort((a, b) => b.score - a.score);
+    const sortedPlayers = players.sort((a, b) => a.place - b.place);
     const playerIndex = sortedPlayers.findIndex((p) => p.id === playerId);
     const difference = 25;
 
@@ -397,6 +397,7 @@ class GameModel extends Model {
 
   finishGame = () => {
     this.state.status = "finished";
+    this.players = this.calculatePlaces();
 
     if (!this.settings.localGame) {
       this.players.forEach((player) => {
@@ -404,8 +405,6 @@ class GameModel extends Model {
         player.rating = player.rating + this.calculateRating(player.id);
       });
     }
-
-    this.players = this.calculatePlaces();
   };
 }
 
