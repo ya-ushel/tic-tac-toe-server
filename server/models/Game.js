@@ -381,12 +381,8 @@ class GameModel extends Model {
     );
 
     let place = 1;
-    let maxScore = 0;
 
     sortedPlayers.forEach((p, i) => {
-      // if (p.score === maxScore) {s
-      // }
-
       p.place = place;
       place++;
       return p;
