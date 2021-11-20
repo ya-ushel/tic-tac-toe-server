@@ -16,9 +16,6 @@ export default {
   data() {
     return {};
   },
-  async beforeMount() {
-    await this.$store.dispatch("getAllRooms");
-  },
   methods: {
     async createRoom() {
       await this.$store.dispatch("createUserRooms");

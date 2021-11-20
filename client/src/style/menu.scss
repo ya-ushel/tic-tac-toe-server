@@ -1,0 +1,135 @@
+.menu {
+  width: 120px;
+  height: 100%;
+  font-size: 5px;
+  background: #20639b;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .profile .img,
+  .figure .img {
+    height: 80px;
+    width: 80px;
+    display: flex;
+    margin: 20px auto 10px;
+    border-radius: 30px;
+    overflow: hidden;
+  }
+
+  .profile {
+    .img {
+      border: 5px solid #ed553b;
+
+      img {
+        opacity: 0.8;
+      }
+    }
+    .name {
+      color: white;
+      width: 80px;
+      padding: 0 5px;
+      margin: 0 auto;
+      background: #173f5f;
+      text-align: center;
+      border-radius: 5px;
+
+      h1 {
+        font-size: 16px;
+        overflow: hidden;
+      }
+    }
+  }
+
+  .figure {
+    .img {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      background: #ed553b;
+      cursor: pointer;
+      margin: 20px auto;
+
+      svg {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto;
+      }
+
+      svg path {
+        fill: white;
+      }
+    }
+  }
+
+  svg {
+    width: 30px;
+    height: 30px;
+
+    path {
+      fill: #173f5f;
+    }
+  }
+
+  .items {
+    margin-left: 45px;
+    width: 75px;
+
+    .item {
+      padding: 5px 0 5px 5px;
+      background: #20639b;
+      cursor: pointer;
+
+      .border-radius-top,
+      .border-radius-bottom {
+        width: 45px;
+        height: 45px;
+        background: white;
+        position: absolute;
+        right: 0;
+        display: none;
+
+        .content {
+          width: 45px;
+          height: 45px;
+          border-radius: 0 0 30px 0;
+          background: #20639b;
+        }
+      }
+
+      .border-radius-top {
+        top: -45px;
+
+        .content {
+          border-radius: 0 0 30px 0;
+        }
+      }
+
+      .border-radius-bottom {
+        bottom: -45px;
+
+        .content {
+          border-radius: 0 30px 0 0;
+        }
+      }
+
+      .svg-wrap {
+        z-index: 100;
+        position: relative;
+      }
+    }
+
+    .item.active {
+      position: relative;
+      background: white;
+      border-radius: 50px 0 0 50px !important;
+      height: 30px;
+
+      .border-radius-top,
+      .border-radius-bottom {
+        display: block;
+      }
+    }
+  }
+}

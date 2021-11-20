@@ -1,13 +1,12 @@
 <template>
   <div class="room-active">
-    <h3>Wait players</h3>
-    <div class="active-room" v-if="getUserRoom">
-      <div class="active-room-header">{{ getUserRoom.name }}</div>
+    <h3>Waiting for players</h3>
+    <div class="active-room" v-if="getCurrentRoom">
       <div class="active-room-content">
         <div
           v-for="(item, i) in 10"
           :key="i"
-          :class="{ is: i < getUserRoom.playerList.length }"
+          :class="{ is: i < getCurrentRoom.length }"
           class="circle"
         ></div>
       </div>
@@ -24,13 +23,13 @@ export default {
   props: {},
   components: { ActiveRoom },
   computed: {
-    ...mapGetters(["getUserRoom", "getUser"]),
+    ...mapGetters(["getCurrentRoom", "getUser"]),
     isUser() {
       // this.userInRoom = false;
     },
   },
   watch: {
-    getUserRoom(data) {
+    getInfoRoom(data) {
       data?.playerList?.forEach((element) => {
         if (element === this.getUser.id) {
           this.userInRoom = true;
@@ -45,16 +44,7 @@ export default {
     };
   },
   mounted() {},
-  methods: {
-    async joinRoom() {
-      // await this.$store.dispatch("createUserRooms");
-    },
-    async leaveRoom() {
-      this.userInRoom = true;
-      await this.$store.dispatch("leaveUserRooms");
-      await this.$store.dispatch("getAllRooms");
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -70,12 +60,11 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  height: 80px;
-  background: #d5da35;
-  border: 2px solid #d5da35;
+  height: 55px;
+  background: #1e80c1;
   border-radius: 10px;
-  padding: 0 20px 20px 20px;
-  margin: 16px 0 0 0;
+  padding: 0 5px 5px;
+  margin: 5px 0;
 }
 
 .active-room-header {
@@ -90,10 +79,10 @@ export default {
 }
 
 .active-room-content .circle {
-  width: 10px;
-  height: 10px;
-  border-radius: 50px;
-  border: 2px solid #274482;
+  width: 19px;
+  height: 19px;
+  border-radius: 3px;
+  background: white;
 }
 
 .active-room-content .circle.is {

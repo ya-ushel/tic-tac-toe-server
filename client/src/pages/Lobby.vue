@@ -1,16 +1,12 @@
 <template>
-  <div>
-    <Header />
-    <div class="content">
-      <!-- <UserList /> -->
-      <Rooms />
-      <!-- <RoomInfo /> -->
-    </div>
+  <div class="content">
+    <!-- <UserList /> -->
+    <Rooms />
+    <RoomInfo />
   </div>
 </template>
 
 <script>
-import Header from "../components/Header.vue";
 import RoomInfo from "../components/lobby/RoomInfo.vue";
 import Rooms from "../components/lobby/Rooms.vue";
 import UserList from "../components/lobby/UserList.vue";
@@ -18,7 +14,6 @@ import UserList from "../components/lobby/UserList.vue";
 export default {
   name: "Lobby",
   components: {
-    Header,
     RoomInfo,
     Rooms,
     UserList,
@@ -39,7 +34,7 @@ export default {
 
 <style>
 .content {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
 }

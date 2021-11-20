@@ -34,16 +34,7 @@ export default {
     await this.$store.dispatch("getAllUsers");
   },
   mounted() {},
-  methods: {
-    async joinRoom() {
-      // await this.$store.dispatch("createUserRooms");
-    },
-    async leaveRoom() {
-      this.userInRoom = true;
-      await this.$store.dispatch("leaveUserRooms");
-      await this.$store.dispatch("getAllRooms");
-    },
-  },
+  methods: {},
 };
 </script>
 

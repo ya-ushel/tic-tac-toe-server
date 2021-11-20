@@ -7,35 +7,43 @@ Vue.use(Vuex);
 export default {
   state: {
     isGame: false,
-    board: {
-      size: 10,
-      players: [
-        { name: "Tolik", icon: "®", score: 0 },
-        { name: "Volodya", icon: "∑", score: 0 },
-        { name: "Pavluha", icon: "≤", score: 0 },
-        { name: "Diablo228", icon: "˚", score: 0 },
-        { name: "Patricio", icon: "¬", score: 0 },
-        { name: "Valentina", icon: "√", score: 0 },
-        { name: "Oxana", icon: "å", score: 0 },
-        { name: "Kizaru", icon: "ß", score: 0 },
-      ],
-    },
+    gameId: "",
+    game: null,
   },
   getters: {
     getStateGame(state) {
       return state.isGame;
     },
-    getBoard(state) {
-      return state.board;
+    getGame(state) {
+      return state.game;
+    },
+    getGameId(state) {
+      return state.gameId;
     },
   },
   mutations: {
     setStateGame(state, payload) {
       state.isGame = payload;
     },
-    setBoard(state, payload) {
-      state.board = payload;
+    setGame(state, payload) {
+      state.game = payload;
+    },
+    setGameId(state, payload) {
+      state.gameId = payload;
     },
   },
-  actions: {},
+  actions: {
+    async getGameStats({ commit }, gameId) {
+      try {
+        const res = await axios.get("games/get", {
+          params: { gameId: gameId },
+        });
+        commit("setGame", res.data);
+        console.log("setGame", this);
+        return res.data;
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+  },
 };

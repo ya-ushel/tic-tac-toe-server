@@ -6,16 +6,12 @@ Vue.use(Vuex);
 
 export default {
   state: {
-    user: {
-      name: "",
-      id: "",
-    },
+    user: {},
     users: [],
   },
 
   getters: {
     getUser(state) {
-      console.log(state, "dljnashkjdhbajln");
       return state.user;
     },
     getUsers(state) {

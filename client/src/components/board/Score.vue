@@ -1,8 +1,8 @@
 <template>
   <div class="score">
     <h3>Score</h3>
-    <div class="player" v-for="(player, i) in getBoard.players" :key="i">
-      {{ player.name + " - " + player.score }}
+    <div class="player" v-for="(player, i) in players" :key="i">
+      {{ player.nickname + " - " + player.score }}
     </div>
   </div>
 </template>
@@ -12,12 +12,16 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Field",
-  props: {},
+  props: {
+    players: {
+      type: Array,
+    },
+  },
   computed: {
-    ...mapGetters(["getBoard"]),
+    ...mapGetters([, "getGame"]),
   },
   watch: {
-    getUserRoom(data) {
+    getInfoRoom(data) {
       data?.playerList?.forEach((element) => {
         if (element === this.getUser.id) {
           this.userInRoom = true;

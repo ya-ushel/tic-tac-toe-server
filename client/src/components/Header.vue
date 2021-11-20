@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <!-- <h1>{{ getUser.user.login }}</h1>
-    <h1>{{ getUser.user.id }}</h1> -->
+    <h1>{{ getUser.nickname }}</h1>
+    <h1>{{ getUser.id }}</h1>
     <div class="logo">
-      <img src="../assets/img/logo.jpg" alt="" />
+      <!-- <img src="../assets/img/logo.jpg" alt="" /> -->
     </div>
   </div>
 </template>
@@ -20,9 +20,7 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-    console.log(this.getUser, "getUser");
-  },
+  mounted() {},
   methods: {},
 };
 </script>

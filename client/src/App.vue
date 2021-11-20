@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Menu />
     <router-view />
   </div>
 </template>
@@ -8,66 +9,86 @@
 import { mapGetters } from "vuex";
 import Lobby from "./pages/Lobby.vue";
 import { checkAuthState } from "./firebase";
+import { initSockets } from "./sockets";
+import Menu from "./components/Menu.vue";
+import { socket } from "./sockets";
 
 export default {
   name: "App",
-
-  components: { Lobby },
+  components: { Lobby, Menu },
   computed: {
     ...mapGetters(["getUser", "getStateGame"]),
   },
+  data() {
+    return {};
+  },
   methods: {
+    getRandomArbitrary(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    },
     getterUser() {
-      let login = localStorage.getItem("login");
-      if (login === null) {
-        checkAuthState(Date.now());
+      let nickname = localStorage.getItem("nickname");
+      if (nickname === null) {
+        checkAuthState({
+          nickname: "Player" + this.getRandomArbitrary(1000, 9999),
+          avatarColor: "#15f3b8",
+          gameHistory: [],
+          coins: 500,
+          experience: 0,
+          rating: 1000,
+        });
       }
       let user = {
-        login: localStorage.getItem("login"),
+        nickname: localStorage.getItem("nickname"),
         id: localStorage.getItem("id"),
+        avatarColor: "#15f3b8",
+        gameHistory: [],
+        coins: 500,
+        experience: 0,
+        rating: 1000,
       };
       this.$store.commit("setUser", user);
-
       this.getStateGame
-        ? this.$router.push({ name: "Board" }).catch((err) => {})
-        : this.$router.push({ name: "Lobby" }).catch((err) => {});
-      // this.$socket.emit("userJoined", user);
+        ? this.$router.push({ name: "board" }).catch((err) => {})
+        : this.$router.push({ name: "lobby" }).catch((err) => {});
+
+      initSockets();
     },
   },
-  sockets: {
-    connect: function() {
-      console.log("socket connected");
-    },
-    customEmit: function(data) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-      );
-    },
-  },
-  beforeMount() {
-    console.log(this.$store.state.user.id, "store.state.user.id2");
+  async beforeMount() {
     this.getterUser();
+    socket.on("room.started", async (gameId) => {
+      this.$store.commit("setGameId", gameId);
+      localStorage.setItem("gameId", gameId);
+      await this.$store.dispatch("getGameStats", gameId);
+    });
   },
 };
 </script>
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800;900&display=swap");
-
 #app,
 body {
   font-family: "Roboto Slab", serif;
-  margin: 0;
-  padding: 0;
+  display: flex;
+}
+
+#app {
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+}
+
+.content {
+  height: 100%;
+  width: 100%;
+  display: flex;
 }
 
 body {
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  width: calc(100vw - 20px);
+  margin: 5px;
+  padding: 0;
+  width: calc(100vw - 10px);
+  height: calc(100vh - 10px);
+  overflow: hidden;
 }
 </style>

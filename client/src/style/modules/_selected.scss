@@ -1,0 +1,49 @@
+/* Selected Tags */
+.vs__selected {
+  display: flex;
+  align-items: center;
+  background-color: #1f80c1;
+  border: $vs-selected-border-width $vs-selected-border-style
+    $vs-selected-border-color;
+  border-radius: $vs-border-radius;
+  color: white;
+  line-height: 20px;
+  margin: 0 2px;
+  padding: 0 0.25em;
+  z-index: 0;
+  font-size: 12px;
+  height: 20px;
+
+  path {
+    fill: white;
+  }
+}
+
+.vs__deselect {
+  display: inline-flex;
+  appearance: none;
+  margin-left: 4px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: none;
+  fill: $vs-controls-color;
+  text-shadow: $vs-controls-deselect-text-shadow;
+}
+
+/* States */
+
+.vs--single {
+  .vs__selected {
+    background-color: transparent;
+    border-color: transparent;
+  }
+  &.vs--open .vs__selected,
+  &.vs--loading .vs__selected {
+    position: absolute;
+    opacity: 0.4;
+  }
+  &.vs--searching .vs__selected {
+    display: none;
+  }
+}
