@@ -13,6 +13,7 @@ const defaultGameOptions = {
   localPlayers: [],
   name: "Default room name",
   players: 2,
+  boardSize: 15,
 };
 
 module.exports = { defaultGameOptions, firebaseConfig };

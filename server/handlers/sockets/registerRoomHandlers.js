@@ -22,9 +22,42 @@ const registerRoomHandlers = async (io, socket, userId) => {
     io.emit("room.created", data);
   };
 
-  const userLeft = async (data) => {
-    console.log("userLeft", data);
-    io.emit("room.user-left", data);
+  const userLeft = async ({ gameId, roomId }) => {
+    console.log("userLeft", roomId);
+
+    const room = await getDoc("rooms", roomId);
+
+    if (!room && gameId) {
+      const game = await getDoc("games", room.gameId);
+      if (game) {
+        await deleteDoc("games", game.id);
+      }
+    }
+
+    if (room?.gameId) {
+      const game = await getDoc("games", room.gameId);
+      const players = game.players.map((p) => {
+        if (p.id === userId) {
+          p.status = "left";
+        }
+
+        return p;
+      });
+
+      const activePlayers = players.filter(
+        (p) => p.status !== "left" && !p.local
+      );
+
+      game.players = players;
+
+      if (!activePlayers.length) {
+        await deleteDoc("games", game.id);
+      } else {
+        await setDoc("games", game.id, game);
+      }
+    }
+
+    io.emit("room.user-left");
   };
 
   const startGame = async (data) => {
@@ -60,7 +93,10 @@ const registerRoomHandlers = async (io, socket, userId) => {
     const game = new GameModel(gameProps);
     const userIds = room.users.map(({ id }) => id);
 
-    await game.addPlayers(userIds, [userCopy, ...room.options.localPlayers]);
+    await game.addPlayers(userIds, room.options.localGame, [
+      userCopy,
+      ...room.options.localPlayers,
+    ]);
 
     const gameModel = game.get();
 
